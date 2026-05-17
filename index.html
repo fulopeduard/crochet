@@ -307,6 +307,7 @@ LAYOUT & MOBILE OPTIMIZATION:
 • Stitch count at the end of each row must be extremely easy to notice.
 • Put stitch counts inside a visually separated pastel-colored badge/pill with strong contrast.
 • Make the layout comfortable to use one-handed beside a real crochet project.
+• For the long-press (1 second hold) functionality on mobile rows, ensure it works flawlessly by following these technical rules: Explicitly disable default text selection and callout menus on the row text using CSS (user-select: none;, -webkit-user-select: none;, -webkit-touch-callout: none;). Build a robust JavaScript long-press handler using touchstart, touchend, touchmove, and touchcancel. Clear the timeout if the user scrolls or their finger moves (touchmove).
 
 VISUAL DESIGN:
 • The webpage should be extremely cute, cozy, friendly, and aesthetically pleasing.
@@ -341,12 +342,7 @@ For EVERY crochet abbreviation used anywhere in the pattern (for example: SC, IN
 • The full English meaning
 • The Hungarian crochet term
 • A simple Hungarian beginner-friendly explanation
-• Every abreviation should be clickable to see the translation, in the crochet pattern too. The abreviation text should be clickable and colored with light blue indicating that it is clickable, but it should use the same space as normal text to make sure that the text stays in one line, if possible.
-
-
-This requirement is mandatory for ALL abbreviations appearing in the pattern, not only common ones.
-
-The abbreviation explanations must be fully translated into Hungarian, not only partially translated.
+• Every abreviation should be clickable to see the translation, in the crochet pattern too. The abreviation text should be clickable and colored with light blue indicating that it is clickable, but it should use the same space as normal text to make sure that the text stays in one line, if possible. This requirement is mandatory for ALL abbreviations appearing in the pattern, not only common ones. The abbreviation explanations must be fully translated into Hungarian, not only partially translated.
 
 Example format:
 SC
@@ -357,7 +353,7 @@ SC
 INC
 • English: Increase
 • Hungarian: Szaporítás
-• Hungarian explanation: "Két öltést készítesz ugyanabba a szembe, hogy növeld a szemek számát."
+• Hungarian explanation: "Két öltést készítesz ugyanabba a szembe, hogy növeld a szemek számát." Use e.preventDefault() to stop the browser's native context menu from hijacking the interaction."
 
 The website must make these abbreviations clickable or hoverable everywhere they appear in the pattern. `;
 
