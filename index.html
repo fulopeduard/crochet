@@ -251,22 +251,59 @@
     <script>
         function copyPrompt() {
             const ytInput = document.getElementById('ytLink').value.trim();
-            const linkToUse = ytInput !== "" ? ytInput : "[A LINK]";
+            const linkToUse = ytInput !== "" ? ytInput : "[PASTE YOUTUBE VIDEO LINK HERE]";
 
             const promptText = `${linkToUse}
-Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
 
-Requirements:
-• Write the crochet pattern primarily using standard English crochet terminology and abbreviations.
-• Also generate a full Hungarian translation of the entire pattern.
-• Organize the instructions clearly by sections based on the project parts.
-• Number every row/round properly.
-• Include stitch counts at the end of each row/round whenever possible.
-• Explain color changes, stuffing moments, sewing/assembly steps, materials needed, and special notes.
-• Make the instructions easy to follow without needing to watch the video again.
-• Preserve the creator’s intended structure and order of the project as accurately as possible.
+Watch this YouTube crochet tutorial and extract the complete crochet pattern step-by-step.
 
-Then create a cute, cozy, premium-quality single-file HTML webpage that helps track crochet progress.
+Pattern requirements:
+• Use standard English crochet terminology/abbreviations + full Hungarian translation.
+• Keep the original project structure/order from the video.
+• Organize by sections/parts.
+• Number every row/round and include stitch counts when possible.
+• Include materials, color changes, stuffing, sewing/assembly, repeats, notes, warnings, and special instructions.
+• Place every instruction directly beside the relevant row/round/section — never collect notes only at the end.
+• Make the pattern fully usable without watching the video again.
+• If something is unclear, estimate it and mark it clearly as estimated.
+• Do not summarize; extract the full detailed pattern.
+
+Create a single-file HTML webpage (HTML/CSS/JS only) for tracking crochet progress.
+
+Webpage requirements:
+• Default language: English.
+• Add instant EN/HU switch for the full UI + pattern.
+• Both languages must work offline inside the same HTML file.
+• Cute/cozy aesthetic matching the crochet project.
+• Mobile-friendly and responsive.
+• Every row/round must have:
+  • Checkbox (Checkbox should visually represent the crochet project using an emoji that matches the item being made (instead of a standard checkbox icon)
+  Example:
+    • Turtle project → 🐢
+    • Bunny project → 🐰
+    • Cat project → 🐱
+  • Row/round number
+  • Instructions
+  • Stitch count
+• Save progress with localStorage.
+• Keep checkbox progress synchronized between EN/HU modes.
+• Add:
+  • Progress bar
+  • "Mark all complete" button
+  • "Reset progress" button
+• Layout should be compact, clean, practical, and comfortable during real crocheting but also very cute design with pastel colors.
+
+Abbreviation system:
+• EVERY crochet abbreviation used anywhere (SC, INC, DEC, SL ST, MR, FLO, BLO, HDC, DC, TR, CH, FO, etc.) must be clickable/hoverable everywhere it appears, including checklist rows, notes, repeats, and section titles.
+• On click/hover show:
+  • Abbreviation
+  • Full English meaning
+  • Hungarian crochet term
+  • Simple Hungarian beginner-friendly explanation
+• Example:
+  • SC → Single Crochet → Rövidpálca → „Alap öltés, ahol egyszer húzod át a fonalat.”
+• Tooltip/popup system must work well on desktop and mobile.
+• Interactive abbreviations must stay inline naturally and should not unnecessarily break rows or increase row height.
 
 LANGUAGE SYSTEM:
 • The webpage must support 3 language modes:
@@ -282,75 +319,7 @@ LANGUAGE SYSTEM:
   • Everything fully translated into Hungarian
 • Switching languages must happen instantly without page reload.
 • Both language versions must be fully generated and available offline inside the same HTML file.
-• Checkbox progress must stay synchronized between all language modes.
-
-PROGRESS TRACKING:
-• Every row/round must have its own checkbox.
-• If the user checks row 5, automatically check rows 1–4 as completed too.
-• If the user unchecks a row, all rows after it should automatically uncheck.
-• Save all progress automatically using localStorage.
-• Add a progress bar showing overall completion percentage.
-• Add buttons for:
-  • "Mark all complete"
-  • "Reset progress"
-
-LAYOUT & MOBILE OPTIMIZATION:
-• Optimize heavily for mobile use while crocheting.
-• Crochet rows should preferably stay on a single line whenever possible.
-• Avoid unnecessary line wrapping.
-• Use compact spacing and responsive layout.
-• Stitch count at the end of each row must be extremely easy to notice.
-• Put stitch counts inside a visually separated pastel-colored badge/pill with strong contrast.
-• Make the layout comfortable to use one-handed beside a real crochet project.
-
-VISUAL DESIGN:
-• The webpage should be extremely cute, cozy, friendly, and aesthetically pleasing.
-• Use soft pastel colors and crochet-inspired textures/patterns in the background.
-• The theme should automatically match the crochet project shown in the video.
-• When a checkbox is completed, instead of a normal checkmark, show a related emoji/icon based on the crochet project.
-  • Example:
-    • Turtle project → 🐢
-    • Bunny project → 🐰
-    • Cat project → 🐱
-• Add soft animations and polished UI interactions.
-• Make it feel like a premium crochet companion app.
-
-TECHNICAL REQUIREMENTS:
-• Use clean HTML, CSS, and JavaScript in a single file.
-• Fully responsive design.
-• Smooth animations and polished interactions.
-• No external dependencies required.
-• Make the UI visually pleasant but lightweight and fast.
-
-Important:
-• If any part of the pattern is unclear from the video, make the best possible estimation and clearly mark it as estimated.
-• Do not summarize — extract the full usable crochet pattern in as much detail as possible.
-• Keep crochet terminology accurate in both English and Hungarian.
-
-Additional important requirement for crochet abbreviations:
-
-For EVERY crochet abbreviation used anywhere in the pattern (for example: SC, INC, DEC, SL ST, MR, FLO, BLO, HDC, DC, TR, CH, SK, FO, etc.), always generate:
-• The original abbreviation
-• The full English meaning
-• The Hungarian crochet term
-• A simple Hungarian beginner-friendly explanation
-
-This requirement is mandatory for ALL abbreviations appearing in the pattern, not only common ones.
-
-The abbreviation explanations must be fully translated into Hungarian, not only partially translated.
-
-Example format:
-SC
-• English: Single Crochet
-• Hungarian: Rövidpálca
-• Hungarian explanation: "Ez egy alap horgoló öltés, ahol egy szemre dolgozol és egyszer húzod át a fonalat."
-
-INC
-• English: Increase
-• Hungarian: Szaporítás
-• Hungarian explanation: "Két öltést készítesz ugyanabba a szembe, hogy növeld a szemek számát."
-
-The website must make these abbreviations clickable or hoverable everywhere they appear in the pattern.`;
+• Checkbox progress must stay synchronized between all language modes.`;
 
             // Másolás a vágólapra
             navigator.clipboard.writeText(promptText).then(() => {
