@@ -251,10 +251,9 @@
     <script>
         function copyPrompt() {
             const ytInput = document.getElementById('ytLink').value.trim();
-            const linkToUse = ytInput !== "" ? ytInput : "[YOUTUBE LINK]";
+            const linkToUse = ytInput !== "" ? ytInput : "[A LINK]";
 
             const promptText = `${linkToUse}
-
 Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
 
 Requirements:
@@ -326,7 +325,32 @@ TECHNICAL REQUIREMENTS:
 Important:
 • If any part of the pattern is unclear from the video, make the best possible estimation and clearly mark it as estimated.
 • Do not summarize — extract the full usable crochet pattern in as much detail as possible.
-• Keep crochet terminology accurate in both English and Hungarian.`;
+• Keep crochet terminology accurate in both English and Hungarian.
+
+Additional important requirement for crochet abbreviations:
+
+For EVERY crochet abbreviation used anywhere in the pattern (for example: SC, INC, DEC, SL ST, MR, FLO, BLO, HDC, DC, TR, CH, SK, FO, etc.), always generate:
+• The original abbreviation
+• The full English meaning
+• The Hungarian crochet term
+• A simple Hungarian beginner-friendly explanation
+
+This requirement is mandatory for ALL abbreviations appearing in the pattern, not only common ones.
+
+The abbreviation explanations must be fully translated into Hungarian, not only partially translated.
+
+Example format:
+SC
+• English: Single Crochet
+• Hungarian: Rövidpálca
+• Hungarian explanation: "Ez egy alap horgoló öltés, ahol egy szemre dolgozol és egyszer húzod át a fonalat."
+
+INC
+• English: Increase
+• Hungarian: Szaporítás
+• Hungarian explanation: "Két öltést készítesz ugyanabba a szembe, hogy növeld a szemek számát."
+
+The website must make these abbreviations clickable or hoverable everywhere they appear in the pattern.`;
 
             // Másolás a vágólapra
             navigator.clipboard.writeText(promptText).then(() => {
