@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuki Horgolós Prompt Másoló 🧶</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #fce4ec; /* Pasztell rózsaszín háttér */
+            background-image: radial-gradient(#f8bbd0 2px, transparent 2px);
+            background-size: 30px 30px;
+            font-family: 'Nunito', sans-serif;
+            color: #5d4037;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Lebegő amigurumi figurák */
+        .floating-figures {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        .figure {
+            animation: bounce 2.5s ease-in-out infinite alternate;
+        }
+
+        .fig-1 { animation-delay: 0s; }
+        .fig-2 { animation-delay: 0.8s; font-size: 3.5rem; }
+        .fig-3 { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            100% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Fő tartalom kártya */
+        .card {
+            background: #ffffff;
+            padding: 30px 20px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(244, 143, 177, 0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            z-index: 10;
+            border: 4px dashed #ffcdd2;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: #d81b60;
+            margin-bottom: 20px;
+        }
+
+        /* Animált fonal és tű SVG */
+        .yarn-animation {
+            height: 80px;
+            width: 100%;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .yarn-path {
+            fill: none;
+            stroke: #ff8a80;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: drawYarn 3s linear infinite;
+        }
+
+        @keyframes drawYarn {
+            0% { stroke-dashoffset: 200; }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -200; }
+        }
+
+        .hook {
+            position: absolute;
+            font-size: 2rem;
+            top: 25px;
+            left: 50%;
+            animation: crochetMotion 1.5s ease-in-out infinite;
+        }
+
+        @keyframes crochetMotion {
+            0% { transform: translate(30px, 0px) rotate(-20deg); }
+            50% { transform: translate(50px, -15px) rotate(10deg); }
+            100% { transform: translate(30px, 0px) rotate(-20deg); }
+        }
+
+        /* Űrlap elemek */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input {
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 2px solid #f8bbd0;
+            background: #fffafa;
+            font-size: 1rem;
+            font-family: 'Nunito', sans-serif;
+            color: #5d4037;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        input:focus {
+            border-color: #f48fb1;
+            box-shadow: 0 0 10px rgba(244, 143, 177, 0.4);
+        }
+
+        button {
+            background: linear-gradient(135deg, #b3e5fc, #81d4fa);
+            border: none;
+            padding: 16px;
+            border-radius: 20px;
+            color: #01579b;
+            font-weight: 900;
+            font-size: 1.2rem;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(129, 212, 250, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(129, 212, 250, 0.6);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        /* Toast értesítés */
+        .toast {
+            position: fixed;
+            bottom: -80px;
+            background: #a5d6a7;
+            color: #1b5e20;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(165, 214, 167, 0.5);
+            transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+        }
+
+        .toast.show {
+            bottom: 40px;
+        }
+
+        /* Felhők a háttérben */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            opacity: 0.6;
+            z-index: 1;
+            animation: floatClouds 20s linear infinite;
+        }
+        
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .c1 { width: 100px; height: 30px; top: 15%; left: -120px; }
+        .c1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
+        .c1::after { width: 40px; height: 40px; top: -15px; left: 55px; }
+
+        .c2 { width: 80px; height: 25px; top: 75%; left: -100px; animation-duration: 25s; animation-delay: 5s; }
+        .c2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
+        .c2::after { width: 30px; height: 30px; top: -10px; left: 40px; }
+
+        @keyframes floatClouds {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(120vw); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Háttér felhők -->
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+
+    <!-- Lebegő Figurák -->
+    <div class="floating-figures">
+        <div class="figure fig-1">🐰</div>
+        <div class="figure fig-2">🧶</div>
+        <div class="figure fig-3">🐢</div>
+    </div>
+
+    <!-- Fő kártya -->
+    <div class="card">
+        <h1>Varázslatos Prompt Készítő ✨</h1>
+        
+        <!-- Animált horgolás -->
+        <div class="yarn-animation">
+            <svg width="150" height="60" viewBox="0 0 150 60">
+                <path class="yarn-path" d="M10,40 Q40,10 70,40 T130,40" />
+            </svg>
+            <div class="hook">🪄</div>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="ytLink" placeholder="Ide illeszd a YouTube linket... 🎀">
+            <button onclick="copyPrompt()">
+                Készíts & Másolj 📋
+            </button>
+        </div>
+    </div>
+
+    <!-- Siker üzenet -->
+    <div class="toast" id="toastMessage">💖 Sikeresen kimásolva! 💖</div>
+
+    <script>
+        function copyPrompt() {
+            const ytInput = document.getElementById('ytLink').value.trim();
+            const linkToUse = ytInput !== "" ? ytInput : "[YOUTUBE LINK]";
+
+            const promptText = `${linkToUse}
+
+Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
+
+Requirements:
+• Write the crochet pattern primarily using standard English crochet terminology and abbreviations.
+• Also generate a full Hungarian translation of the entire pattern.
+• Organize the instructions clearly by sections based on the project parts.
+• Number every row/round properly.
+• Include stitch counts at the end of each row/round whenever possible.
+• Explain color changes, stuffing moments, sewing/assembly steps, materials needed, and special notes.
+• Make the instructions easy to follow without needing to watch the video again.
+• Preserve the creator’s intended structure and order of the project as accurately as possible.
+
+Then create a cute, cozy, premium-quality single-file HTML webpage that helps track crochet progress.
+
+LANGUAGE SYSTEM:
+• The webpage must support 3 language modes:
+  • Default
+  • EN
+  • HU
+
+• Default mode behavior:
+  • Crochet stitch terminology and abbreviations MUST remain in English.
+  • Explanatory text, helper text, notes, tips, UI labels, and normal sentences MUST be written in Hungarian.
+  • IMPORTANT:
+    • Keep crochet abbreviations in English even inside Hungarian sentences.
+    • Example:
+      Correct:
+      "Hajtsd félbe, SC-vel horgold össze. Vágd el a fonalat."
+      Incorrect:
+      "Hajtsd félbe, rp-vel horgold össze. Vágd el a fonalat."
+  • Any starred tips, notes, warnings, or instructional sentences must stay Hungarian in Default mode.
+  • Only the actual crochet stitch abbreviations/pattern syntax should remain English in Default mode.
+
+• EN mode:
+  • Everything fully in English.
+
+• HU mode:
+  • Everything fully translated into Hungarian, including crochet terminology.
+
+• Switching languages must happen instantly without page reload.
+• Both language versions must be fully generated and available offline inside the same HTML file.
+• Checkbox progress must stay synchronized between all language modes.
+
+PROGRESS TRACKING:
+• Every row/round must have its own checkbox.
+• If the user checks row 5, automatically check rows 1–4 as completed too.
+• If the user unchecks a row, all rows after it should automatically uncheck.
+• Save all progress automatically using localStorage.
+• Add a progress bar showing overall completion percentage.
+• Add buttons for:
+  • "Mark all complete"
+  • "Reset progress"
+
+LAYOUT & MOBILE OPTIMIZATION:
+• Optimize heavily for mobile use while crocheting.
+• Crochet rows should preferably stay on a single line whenever possible.
+• Avoid unnecessary line wrapping.
+• Use compact spacing and responsive layout.
+• Stitch count at the end of each row must be extremely easy to notice.
+• Put stitch counts inside a visually separated pastel-colored badge/pill with strong contrast.
+• Make the layout comfortable to use one-handed beside a real crochet project.
+
+VISUAL DESIGN:
+• The webpage should be extremely cute, cozy, friendly, and aesthetically pleasing.
+• Use soft pastel colors and crochet-inspired textures/patterns in the background.
+• The theme should automatically match the crochet project shown in the video.
+• When a checkbox is completed, instead of a normal checkmark, show a related emoji/icon based on the crochet project.
+  • Example:
+    • Turtle project → 🐢
+    • Bunny project → 🐰
+    • Cat project → 🐱
+• Add soft animations and polished UI interactions.
+• Make it feel like a premium crochet companion app.
+
+TECHNICAL REQUIREMENTS:
+• Use clean HTML, CSS, and JavaScript in a single file.
+• Fully responsive design.
+• Smooth animations and polished interactions.
+• No external dependencies required.
+• Make the UI visually pleasant but lightweight and fast.
+
+Important:
+• If any part of the pattern is unclear from the video, make the best possible estimation and clearly mark it as estimated.
+• Do not summarize — extract the full usable crochet pattern in as much detail as possible.
+• Keep crochet terminology accurate in both English and Hungarian.`;
+
+            // Másolás a vágólapra
+            navigator.clipboard.writeText(promptText).then(() => {
+                showToast();
+            }).catch(err => {
+                console.error('Nem sikerült másolni: ', err);
+                alert("Kérlek, engedélyezd a vágólaphoz való hozzáférést!");
+            });
+        }
+
+        // Toast értesítés megjelenítése
+        function showToast() {
+            const toast = document.getElementById("toastMessage");
+            toast.classList.add("show");
+            
+            // 3 másodperc után eltűnik
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
