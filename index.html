@@ -438,7 +438,7 @@
             }
         }
 
-        // A változatlan prompt szöveg generálása
+        // A frissített prompt szöveg generálása (Kiegészítve a HEADER & YOUTUBE LINK résszel)
         function getPromptText(link) {
             return `${link}
 Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
@@ -476,6 +476,10 @@ LANGUAGE SYSTEM:
 • Both language versions must be fully generated and available offline inside the same HTML file.
 • Checkbox progress must stay synchronized between all language modes.
 
+HEADER & YOUTUBE LINK:
+• Right next to the language switcher buttons (Default, EN, HU) at the top of the page, add a prominent YouTube button (e.g., "📺 Tutorial" or a YouTube icon).
+• When this button is clicked, it MUST open the original YouTube tutorial link in a new tab. The exact link to use is: ${link}
+
 PROGRESS TRACKING:
 • Every row/round must have its own checkbox.
 • If the user checks row 5, automatically check rows 1–4 as completed too.
@@ -489,7 +493,7 @@ PROGRESS TRACKING:
 LAYOUT & MOBILE OPTIMIZATION:
 • Optimize heavily for mobile use while crocheting.
 • Crochet rows should preferably stay on a single line whenever possible, but if the text is too long and it cannot display it in one line then the line should be scrollable vertically and if the line is holded for a second (or touched for 1 sec on mobile) than it should open it in a pop up windows displaying the information in the window.
-• For the long-press (1 second hold) functionality on mobile rows, ensure it works flawlessly
+• For the long-press (1 second hold) functionality on mobile rows, ensure it works flawlessly. IMPORTANT: The long-press popup trigger MUST work when tapping and holding ANYWHERE on the entire row's surface area (including the checkbox, spacing, and background), not just when holding the text itself.
 • Avoid unnecessary line wrapping, but you can use two rows if needed, text visibility is more important.
 • It's important to optimize the website for mobile view.
 • Stitch count at the end of each row must be extremely easy to notice.
