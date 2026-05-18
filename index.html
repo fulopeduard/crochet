@@ -432,7 +432,7 @@
             }
         }
 
-        // A TELJESEN ÚJRAMODELLEZETT PROMPT, AMI LEHETETLENNÉ TESZI A JAVASCRIPT HIBÁT
+        // A TELJESEN ÚJRAMODELLEZETT PROMPT, AMI LEHETETLENNÉ TESZI A JAVASCRIPT HIBÁT, ÉS TISZTA CSS MEGOLDÁST HASZNÁL
         function getPromptText(link) {
             return `${link}
 Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
@@ -444,10 +444,11 @@ Requirements:
 
 Then create a cute, cozy, premium-quality single-file HTML webpage that helps track crochet progress.
 
-LANGUAGE SYSTEM (3 Modes: Default, EN, HU):
+LANGUAGE SYSTEM (3 Modes: Default, EN, HU) & CSS REQUIREMENT:
 • Default: Crochet instructions stay in English terminology, but EVERY explanation, tip, abbreviation definition or full sentence needs to be translated to Hungarian. UI is Hungarian.
 • EN: Everything fully in English.
 • HU: Everything fully translated into Hungarian.
+• CRITICAL: Do NOT use inline \`style="display:none"\` attributes in the HTML to hide languages. Instead, add a default class to the <body> element (e.g., <body class="lang-def">). Use CSS to hide inactive languages (e.g., \`body:not(.lang-en) .lang-en { display: none; }\`). The JavaScript language switcher should simply update the class on the <body> tag.
 
 HEADER & YOUTUBE LINK:
 • Include language switcher buttons and a prominent YouTube button ("📺 Tutorial" / "📺 Oktatóvideó") that opens exactly this link in a new tab: ${link}
@@ -466,14 +467,14 @@ To make it 100% IMPOSSIBLE to get an "Uncaught SyntaxError" from multiline strin
 
 Instead, output ALL data directly as pure HTML elements inside the <body>. HTML natively handles line breaks without crashing. 
 
-1. HTML ROW STRUCTURE REQUIREMENT (Do this for EVERY row/note):
+1. HTML ROW STRUCTURE REQUIREMENT (Do this for EVERY row/note, no inline display:none!):
 <div class="row-item" data-idx="1">
   <div class="custom-checkbox" onclick="toggleRow(1)"></div>
   <div class="row-content">
     <span class="round-number">R1</span>
     <span class="lang-text lang-def">6 <span class="abbr" onclick="showAbbr('SC')">SC</span> in a MR (Ide jön a magyar tipp)</span>
-    <span class="lang-text lang-en" style="display:none;">6 <span class="abbr" onclick="showAbbr('SC')">SC</span> in a MR</span>
-    <span class="lang-text lang-hu" style="display:none;">6 Rövidpálca a Varázskörbe (Magyar tipp)</span>
+    <span class="lang-text lang-en">6 <span class="abbr" onclick="showAbbr('SC')">SC</span> in a MR</span>
+    <span class="lang-text lang-hu">6 Rövidpálca a Varázskörbe (Magyar tipp)</span>
     <span class="badge">6</span>
   </div>
 </div>
@@ -487,7 +488,7 @@ Do not put the abbreviation definitions in JavaScript. Create a hidden HTML cont
 </div>
 
 YOUR JAVASCRIPT SHOULD ONLY BE A STATIC CONTROLLER:
-The <script> tag must ONLY contain the logic (functions for language switching by querying '.lang-text', checkbox toggles by data-idx, and popup opening by reading from the #abbr-dictionary DOM elements). 
+The <script> tag must ONLY contain the logic (functions for language switching by changing the body class, checkbox toggles by data-idx, and popup opening by reading from the #abbr-dictionary DOM elements). 
 It must contain ZERO strings of pattern text or abbreviations.`;
         }
 
