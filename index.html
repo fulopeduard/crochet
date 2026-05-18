@@ -496,7 +496,6 @@ LAYOUT & MOBILE OPTIMIZATION:
 • Put stitch counts inside a visually separated pastel-colored badge/pill with strong contrast.
 • Make the layout comfortable to use one-handed beside a real crochet project.
 
-
 VISUAL DESIGN:
 • The webpage should be extremely cute, cozy, friendly, and aesthetically pleasing.
 • Use soft pastel colors and crochet-inspired textures/patterns in the background.
@@ -516,7 +515,17 @@ TECHNICAL REQUIREMENTS:
 • Smooth animations and polished interactions.
 • No external dependencies required.
 • Make the UI visually pleasant but lightweight and fast.
-• Ensure all multi-line strings in JavaScript use template literals backticks instead of standard quotes to prevent syntax errors, and double-check that the code execution will not throw any DOM or console errors.
+
+CRITICAL JAVASCRIPT WARNING (DO NOT IGNORE):
+• When generating the JavaScript code (especially the \`patternData\` array, UI labels, 'Materials', 'Notes', or ANY multi-line text), YOU MUST EXCLUSIVELY USE BACKTICKS (\`) to enclose strings.
+• DO NOT use standard double quotes ("") or single quotes ('') for text that contains line breaks! This is a strict rule.
+• If you use standard quotes for multi-line strings, it will cause an "Uncaught SyntaxError", which breaks the script and leaves the page entirely blank.
+• CORRECT EXAMPLE (using backticks):
+  textEN: \`Line 1
+  Line 2\`
+• WRONG EXAMPLE (using standard quotes):
+  textEN: "Line 1
+  Line 2"
 
 Important:
 • If any part of the pattern is unclear from the video, make the best possible estimation and clearly mark it as estimated.
@@ -543,7 +552,7 @@ INC
 • Hungarian: Szaporítás
 • Hungarian explanation: "Két öltést készítesz ugyanabba a szembe, hogy növeld a szemek számát." Use e.preventDefault() to stop the browser's native context menu from hijacking the interaction."
 
-The website must make these abbreviations clickable or hoverable everywhere they appear in the pattern. `;
+The website must make these abbreviations clickable or hoverable everywhere they appear in the pattern.`;
         }
 
         // Fő gomb megnyomása
