@@ -126,6 +126,8 @@
         .figure {
             animation: bounce 2.5s ease-in-out infinite alternate;
             filter: drop-shadow(0 10px 8px rgba(244, 143, 177, 0.5));
+            /* ÚJ: finom átmenet az emojik cseréjekor */
+            transition: opacity 0.2s ease-in-out;
         }
 
         .fig-1 { animation-delay: 0s; font-size: 3rem; }
@@ -220,25 +222,63 @@
         th { color: #fff; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
         th.sym-header { background-color: #5c3c92; position: relative; }
-        
-        /* ÚJ: Keresés beállítás ikon és menü */
         .sym-header-content { display: flex; align-items: center; justify-content: center; gap: 5px; position: relative; }
-        .settings-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; transition: transform 0.3s; padding: 0; display: flex; }
-        .settings-btn:hover { transform: rotate(45deg); }
-        .settings-popup { 
-            position: absolute; top: 35px; left: 50%; transform: translateX(-50%);
-            background: #fffafa; border: 3px dashed #5c3c92; padding: 12px 15px; border-radius: 15px; 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: none; z-index: 100;
-            color: #5c3c92; font-weight: 800; text-align: left; white-space: nowrap; font-size: 14px;
-        }
-        .settings-popup.show { display: block; animation: fadeIn 0.2s ease-in-out; }
-        .settings-popup input[type="checkbox"] { accent-color: #d81b60; transform: scale(1.2); cursor: pointer; }
-
+        
         th.uk { background-color: #012169; }
         th.us { background-color: #b22234; }
         th.hu { background-color: #27ae60; }
         .search-row th { top: 45px; padding: 10px; z-index: 9; }
-        .search-row th.sym-search { background-color: #4a2e76; }
+        
+        /* Gomb lent a lila mezőben */
+        .search-row th.sym-search { background-color: #4a2e76; text-align: center; }
+        .settings-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; transition: transform 0.3s; padding: 0; margin: 0 auto; display: flex; }
+        .settings-btn:hover { transform: rotate(45deg) scale(1.1); }
+        
+        /* Minden fölé nyíló középső Popup menü */
+        .settings-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
+            z-index: 9998;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .settings-overlay.show { display: block; }
+
+        .settings-popup { 
+            position: fixed; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) scale(0.9);
+            background: #fffafa; border: 4px dashed #5c3c92; padding: 20px 25px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
+            display: none; z-index: 9999;
+            color: #5c3c92; font-weight: 800; text-align: left; white-space: nowrap; font-size: 16px;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        .settings-popup.show { 
+            display: block; 
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .settings-popup-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px dashed #f8bbd0;
+            padding-bottom: 15px; margin-bottom: 15px;
+        }
+        .settings-popup-title {
+            font-size: 1.1rem; color: #d81b60; margin: 0;
+        }
+        .close-popup-btn {
+            background: none; border: none; color: #d81b60; font-size: 1.5rem; font-weight: bold;
+            cursor: pointer; transition: transform 0.2s; line-height: 1; padding: 0 0 0 15px;
+        }
+        .close-popup-btn:hover { transform: scale(1.2) rotate(90deg); color: #c2185b; }
+        
+        .settings-popup input[type="checkbox"] { accent-color: #d81b60; transform: scale(1.4); cursor: pointer; }
+
         .search-row th.uk-search { background-color: #e8ebf1; }
         .search-row th.us-search { background-color: #fbecec; }
         .search-row th.hu-search { background-color: #eaf6ee; }
@@ -316,13 +356,6 @@
                         <th class="sym-header" style="width: 10%;">
                             <div class="sym-header-content">
                                 SYM JEL 
-                                <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()" title="Keresés beállítása">⚙️</button>
-                                <div id="searchSettingsPopup" class="settings-popup">
-                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                                        <input type="checkbox" id="searchDescCheckbox" onchange="filterTable()">
-                                        Keresés a leírásokban is 📖
-                                    </label>
-                                </div>
                             </div>
                         </th>
                         <th colspan="2" class="uk">🇬🇧 UK - ANGOL</th>
@@ -330,7 +363,9 @@
                         <th colspan="2" class="hu">🇭🇺 HU - MAGYAR</th>
                     </tr>
                     <tr class="search-row">
-                        <th class="sym-search"></th>
+                        <th class="sym-search">
+                            <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()" title="Keresés beállítása">⚙️</button>
+                        </th>
                         <th colspan="2" class="uk-search">
                             <input type="text" id="searchUK" class="column-search" placeholder="Keresés UK részben...">
                         </th>
@@ -435,6 +470,19 @@
         </div>
     </div>
 
+    <!-- Fájl végére kihelyezett pop-up és háttere -->
+    <div id="settingsOverlay" class="settings-overlay"></div>
+    <div id="searchSettingsPopup" class="settings-popup">
+        <div class="settings-popup-header">
+            <h3 class="settings-popup-title">Beállítások ⚙️</h3>
+            <button class="close-popup-btn" onclick="toggleSettings()" title="Bezárás">✖</button>
+        </div>
+        <label style="cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="searchDescCheckbox" onchange="filterTable()">
+            Keresés a leírásokban is 📖
+        </label>
+    </div>
+
     <div class="toast" id="toastMessage">💖 Sikeresen kimásolva! 💖</div>
 
     <script>
@@ -449,6 +497,7 @@
 
             // Ha a beállítás menü nyitva van, zárjuk be
             document.getElementById('searchSettingsPopup').classList.remove('show');
+            document.getElementById('settingsOverlay').classList.remove('show');
 
             if (currentView === 'generator') {
                 genView.style.display = 'none';
@@ -462,60 +511,94 @@
                 bgAnims.style.display = 'block';
                 btn.innerHTML = '📖 Horgolás rajzjelei';
                 currentView = 'generator';
+                
+                // --- ÚJ: Visszaváltáskor mind az 5 emoji frissül egy teljesen új random szettre ---
+                refreshAllEmojis();
             }
         }
 
         // --- BEÁLLÍTÁSOK MENÜ ---
         function toggleSettings() {
             const popup = document.getElementById('searchSettingsPopup');
+            const overlay = document.getElementById('settingsOverlay');
             popup.classList.toggle('show');
+            overlay.classList.toggle('show');
         }
 
-        // --- GENERÁTOR LOGIKA ---
-        // Szuper cuki állatkák (capybara helyett vidra, lajhár, hörcsög, hód is bekerült a válogatásba!)
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('searchSettingsPopup');
+            const overlay = document.getElementById('settingsOverlay');
+            const btn = document.getElementById('settingsBtn');
+            if (popup.classList.contains('show') && !popup.contains(event.target) && event.target !== btn) {
+                popup.classList.remove('show');
+                overlay.classList.remove('show');
+            }
+        });
+
+        // --- GENERÁTOR LOGIKA ÉS EMOJI FRISSÍTÉSEK ---
         const animalSets = [
             ['🐰', '🧶', '🐢', '🪡', '🌸'], 
-			['🐵', '🧶', '🙈', '🙉', '🙊'],
-            ['🐱', '🧶', '🐭', '🎀', '🐟'], 
-            ['🐻', '🧶', '🐼', '🐌', '🦑'],
+            ['🐵', '🧵', '🙈', '🙉', '🙊'],
+            ['🐱', '🪡', '🐭', '🎀', '🐟'], 
+            ['🐻', '🧵', '🐼', '🐌', '🦑'],
             ['🦊', '🧶', '🦉', '❤️', '🍄'], 
-            ['🐶', '🧶', '🐸', '🦴', '🪷'], 
-            ['🐷', '🧶', '🐥', '🌻', '🍎'],
-            ['🦄', '🧶', '🦋', '✨', '🌈'], 
+            ['🐶', '📏', '🐸', '🦴', '🦆'], 
+            ['🐷', '✂️', '🐥', '🌻', '🐔'],
+            ['🦄', '🪄', '🦋', '✨', '🌈'], 
             ['🐙', '🧶', '🐳', '🌊', '🐚'], 
-            ['🐘', '🧶', '🦒', '🥜', '🪴'],
+            ['🐘', '🪡', '🦒', '🦀', '🧵'],
             ['🦔', '🧶', '🐿️', '🌰', '🍁'],
-            ['🦙', '🧶', '🐑', '🪡', '☁️'],
-            ['🦦', '🧶', '🦫', '🐬', '💦'], // Kifejezetten vidra & hód (capybara tesók)
-            ['🦥', '🧶', '🐨', '🦎', '🐍'],
+            ['🦙', '🧵', '🐑', '🪡', '☁️'],
+            ['🦦', '✂️', '🦫', '🐬', '💦'],
+            ['🦥', '🧵', '🐨', '🦎', '🐍'],
             ['📏', '🧶', '🪡', '✂️', '👜'],
-            ['🐧', '🧶', '🦭', '🤍', '🐟']
+            ['🐧', '✂️', '🦭', '🤍', '🐟']
         ];
 
+        // Kilapítjuk az összes emojit egyetlen listába az egyenkénti cseréhez
+        const allEmojisPool = animalSets.flat();
         const bgAbbreviations = ['sc', 'dc', 'inc', 'dec', 'ch', 'lsz', 'rp', 'fp', 'szap', 'fogy', 'sl st'];
 
         window.onload = () => {
-            const randomSet = animalSets[Math.floor(Math.random() * animalSets.length)];
-            document.getElementById('fig1').innerText = randomSet[0];
-            document.getElementById('fig2').innerText = randomSet[1];
-            document.getElementById('fig3').innerText = randomSet[2];
-            document.getElementById('fig4').innerText = randomSet[3];
-            document.getElementById('fig5').innerText = randomSet[4];
+            refreshAllEmojis(); // Kezdéskor beállítjuk egy véletlen szettre
             
             createHearts();
             loadHistory();
             
             setInterval(createFaintAbbreviation, 1500);
+            
+            // --- ÚJ: 2 másodpercenként 1 random emoji változik finom animációval ---
+            setInterval(changeSingleRandomEmoji, 2000); 
         };
 
-        // Bárhová máshova kattintva záródjon be a beállítások menü
-        document.addEventListener('click', function(event) {
-            const popup = document.getElementById('searchSettingsPopup');
-            const btn = document.getElementById('settingsBtn');
-            if (!popup.contains(event.target) && event.target !== btn && popup.classList.contains('show')) {
-                popup.classList.remove('show');
+        function refreshAllEmojis() {
+            const randomSet = animalSets[Math.floor(Math.random() * animalSets.length)];
+            for (let i = 1; i <= 5; i++) {
+                const figElement = document.getElementById('fig' + i);
+                figElement.style.opacity = '0'; // Halványítás
+                setTimeout(() => {
+                    figElement.innerText = randomSet[i - 1];
+                    figElement.style.opacity = '1'; // Visszatérés
+                }, 200); // 200ms a CSS transition-nek megfelelően
             }
-        });
+        }
+
+        function changeSingleRandomEmoji() {
+            if (currentView !== 'generator') return; // Csak akkor cserélünk, ha ezen a fülön vagyunk
+            
+            // Véletlenszerű hely kiválasztása (1-től 5-ig)
+            const randomFigIndex = Math.floor(Math.random() * 5) + 1;
+            // Véletlenszerű emoji kiválasztása a teljes medencéből
+            const randomEmoji = allEmojisPool[Math.floor(Math.random() * allEmojisPool.length)];
+            const figElement = document.getElementById('fig' + randomFigIndex);
+            
+            // Finom átmenet: eltűnik, kicserélődik, megjelenik
+            figElement.style.opacity = '0';
+            setTimeout(() => {
+                figElement.innerText = randomEmoji;
+                figElement.style.opacity = '1';
+            }, 200); 
+        }
 
         function createHearts() {
             const container = document.getElementById('heartsContainer');
@@ -675,7 +758,7 @@ It must contain ZERO strings of pattern text or abbreviations.`;
             setTimeout(() => { toast.classList.remove("show"); }, 3000);
         }
 
-        // --- SZÓTÁR KERESŐ LOGIKA FRISSÍTVE ---
+        // --- SZÓTÁR KERESŐ LOGIKA ---
         const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
         const dictSearchInput = document.getElementById('dictSearchInput');
@@ -689,7 +772,6 @@ It must contain ZERO strings of pattern text or abbreviations.`;
             let filterUS = removeAccents(searchUS.value);
             let filterHU = removeAccents(searchHU.value);
             
-            // Lekérjük, hogy a leírásokban is keresünk-e
             let includeDesc = document.getElementById('searchDescCheckbox').checked;
 
             let table = document.getElementById('crochetTable');
@@ -705,15 +787,12 @@ It must contain ZERO strings of pattern text or abbreviations.`;
                     let textUS = "";
                     let textHU = "";
 
-                    // Ha mindkettőben keresünk (Rövidítés + Leírás)
                     if (includeDesc) {
                         textGlobal = removeAccents(tr[i].textContent || tr[i].innerText);
                         textUK = removeAccents((tds[1].textContent || "") + " " + (tds[2].textContent || ""));
                         textUS = removeAccents((tds[3].textContent || "") + " " + (tds[4].textContent || ""));
                         textHU = removeAccents((tds[5].textContent || "") + " " + (tds[6].textContent || ""));
-                    } 
-                    // Alapértelmezett: csak rövidítésekben keresünk (+ a SYM jel oszlopban a globálisnál)
-                    else {
+                    } else {
                         textGlobal = removeAccents((tds[0].textContent || "") + " " + (tds[1].textContent || "") + " " + (tds[3].textContent || "") + " " + (tds[5].textContent || ""));
                         textUK = removeAccents(tds[1].textContent || "");
                         textUS = removeAccents(tds[3].textContent || "");
