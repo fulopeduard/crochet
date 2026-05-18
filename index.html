@@ -67,9 +67,10 @@
             align-items: center;
             width: 100%;
             animation: fadeIn 0.5s ease-in-out;
+            position: relative;
         }
 
-        /* Extra háttér animációk (Szívecskék) */
+        /* Extra háttér animációk */
         #bg-animations {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -86,6 +87,25 @@
             animation: floatUp 10s linear infinite;
         }
 
+        .faint-abbr {
+            position: absolute;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #d81b60;
+            opacity: 0.15;
+            font-family: 'Courier New', Courier, monospace;
+            animation: floatAbbr 8s linear forwards;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes floatAbbr {
+            0% { transform: translateY(20px) scale(0.8) rotate(-15deg); opacity: 0; }
+            20% { opacity: 0.2; }
+            80% { opacity: 0.2; }
+            100% { transform: translateY(-150px) scale(1.2) rotate(15deg); opacity: 0; }
+        }
+
         @keyframes floatUp {
             0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
             20% { opacity: 0.6; }
@@ -95,10 +115,10 @@
 
         .floating-figures {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around;
             width: 100%;
-            max-width: 400px;
-            font-size: 3rem;
+            max-width: 500px;
+            font-size: 2.5rem;
             margin-bottom: 20px;
             z-index: 10;
         }
@@ -108,13 +128,15 @@
             filter: drop-shadow(0 10px 8px rgba(244, 143, 177, 0.5));
         }
 
-        .fig-1 { animation-delay: 0s; }
+        .fig-1 { animation-delay: 0s; font-size: 3rem; }
         .fig-2 { animation-delay: 0.8s; font-size: 3.5rem; }
-        .fig-3 { animation-delay: 0.4s; }
+        .fig-3 { animation-delay: 0.4s; font-size: 3rem; }
+        .fig-4 { animation-delay: 1.2s; font-size: 2.8rem; }
+        .fig-5 { animation-delay: 0.6s; font-size: 3.2rem; }
 
         @keyframes bounce {
-            0% { transform: translateY(0px) rotate(-5deg); }
-            100% { transform: translateY(-20px) rotate(5deg); }
+            0% { transform: translateY(0px) rotate(-10deg); }
+            100% { transform: translateY(-25px) rotate(10deg); }
         }
 
         .card, .history-card {
@@ -133,345 +155,102 @@
             transition: transform 0.3s;
         }
 
+        .card::before { content: '✨'; position: absolute; top: -15px; left: -15px; font-size: 2rem; animation: spin 6s linear infinite; }
+        .card::after { content: '🎀'; position: absolute; bottom: -15px; right: -15px; font-size: 2rem; animation: bounce 2s ease-in-out infinite alternate; }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         .card:hover { transform: translateY(-5px); }
 
-        .card h1 {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: #d81b60;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(248, 187, 208, 0.5);
-        }
+        .card h1 { font-size: 1.6rem; font-weight: 900; color: #d81b60; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(248, 187, 208, 0.5); }
+        .history-card h2 { font-size: 1.3rem; font-weight: 800; color: #c2185b; margin-bottom: 15px; }
 
-        .history-card h2 {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #c2185b;
-            margin-bottom: 15px;
-        }
+        .yarn-animation { height: 80px; width: 100%; margin-bottom: 15px; position: relative; }
+        .yarn-path { fill: none; stroke: #ff8a80; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 200; stroke-dashoffset: 200; animation: drawYarn 3s linear infinite; }
 
-        .yarn-animation {
-            height: 80px;
-            width: 100%;
-            margin-bottom: 15px;
-            position: relative;
-        }
+        @keyframes drawYarn { 0% { stroke-dashoffset: 200; } 50% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -200; } }
 
-        .yarn-path {
-            fill: none;
-            stroke: #ff8a80;
-            stroke-width: 5;
-            stroke-linecap: round;
-            stroke-dasharray: 200;
-            stroke-dashoffset: 200;
-            animation: drawYarn 3s linear infinite;
-        }
-
-        @keyframes drawYarn {
-            0% { stroke-dashoffset: 200; }
-            50% { stroke-dashoffset: 0; }
-            100% { stroke-dashoffset: -200; }
-        }
-
-        .hook {
-            position: absolute;
-            font-size: 2.2rem;
-            top: 20px;
-            left: 50%;
-            animation: crochetMotion 1.5s ease-in-out infinite;
-            filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.1));
-        }
-
-        @keyframes crochetMotion {
-            0% { transform: translate(30px, 0px) rotate(-20deg); }
-            50% { transform: translate(50px, -15px) rotate(10deg); }
-            100% { transform: translate(30px, 0px) rotate(-20deg); }
-        }
+        .hook { position: absolute; font-size: 2.5rem; top: 20px; left: 50%; animation: crochetMotion 1.5s ease-in-out infinite; filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.1)); }
+        @keyframes crochetMotion { 0% { transform: translate(30px, 0px) rotate(-20deg); } 50% { transform: translate(50px, -15px) rotate(15deg); } 100% { transform: translate(30px, 0px) rotate(-20deg); } }
 
         .input-group { display: flex; flex-direction: column; gap: 15px; }
 
-        #view-generator input {
-            padding: 15px 20px;
-            border-radius: 20px;
-            border: 3px solid #f8bbd0;
-            background: #fffafa;
-            font-size: 1rem;
-            font-family: 'Nunito', sans-serif;
-            color: #5d4037;
-            outline: none;
-            transition: 0.3s;
-            text-align: center;
-            width: 100%;
-            box-shadow: inset 0 3px 5px rgba(248, 187, 208, 0.3);
-        }
+        #view-generator input { padding: 15px 20px; border-radius: 20px; border: 3px solid #f8bbd0; background: #fffafa; font-size: 1rem; font-family: 'Nunito', sans-serif; color: #5d4037; outline: none; transition: 0.3s; text-align: center; width: 100%; box-shadow: inset 0 3px 5px rgba(248, 187, 208, 0.3); }
+        #view-generator input:focus { border-color: #f48fb1; box-shadow: 0 0 15px rgba(244, 143, 177, 0.6), inset 0 2px 4px rgba(0,0,0,0.05); transform: scale(1.02); }
 
-        #view-generator input:focus {
-            border-color: #f48fb1;
-            box-shadow: 0 0 15px rgba(244, 143, 177, 0.6), inset 0 2px 4px rgba(0,0,0,0.05);
-            transform: scale(1.02);
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, #b3e5fc, #81d4fa);
-            border: none;
-            padding: 16px;
-            border-radius: 20px;
-            color: #01579b;
-            font-weight: 900;
-            font-size: 1.2rem;
-            font-family: 'Nunito', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            width: 100%;
-        }
-
+        .action-btn { background: linear-gradient(135deg, #b3e5fc, #81d4fa); border: none; padding: 16px; border-radius: 20px; color: #01579b; font-weight: 900; font-size: 1.2rem; font-family: 'Nunito', sans-serif; cursor: pointer; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5); display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; }
         .btn-pulse { animation: gentlePulse 2s infinite; }
-
-        @keyframes gentlePulse {
-            0% { box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5); }
-            50% { box-shadow: 0 5px 25px rgba(129, 212, 250, 0.9); }
-            100% { box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5); }
-        }
-
-        .action-btn:hover {
-            transform: translateY(-5px) scale(1.03);
-            background: linear-gradient(135deg, #81d4fa, #4fc3f7);
-            color: #014377;
-        }
-
+        @keyframes gentlePulse { 0% { box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5); } 50% { box-shadow: 0 5px 25px rgba(129, 212, 250, 0.9); } 100% { box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5); } }
+        .action-btn:hover { transform: translateY(-5px) scale(1.03); background: linear-gradient(135deg, #81d4fa, #4fc3f7); color: #014377; }
         .action-btn:active { transform: translateY(2px) scale(0.98); }
 
-        .history-list {
-            list-style: none;
-            text-align: left;
-            max-height: 250px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
+        .history-list { list-style: none; text-align: left; max-height: 250px; overflow-y: auto; padding-right: 5px; }
         .history-list::-webkit-scrollbar { width: 8px; }
         .history-list::-webkit-scrollbar-track { background: #fce4ec; border-radius: 10px; }
         .history-list::-webkit-scrollbar-thumb { background: #f48fb1; border-radius: 10px; }
-
-        .history-item {
-            background: #fff0f5;
-            padding: 12px 15px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            border: 2px solid #ffcdd2;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            transition: 0.3s;
-            animation: slideIn 0.4s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .history-item:hover {
-            background: #ffe4e1;
-            transform: translateX(5px);
-        }
-
+        .history-item { background: #fff0f5; padding: 12px 15px; border-radius: 15px; margin-bottom: 10px; border: 2px solid #ffcdd2; display: flex; flex-direction: column; gap: 5px; transition: 0.3s; animation: slideIn 0.4s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        .history-item:hover { background: #ffe4e1; transform: translateX(5px); }
         .hist-date { font-size: 0.8rem; color: #880e4f; font-weight: 700; }
         .hist-link { font-size: 0.9rem; color: #5d4037; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
         .hist-btn-group { display: flex; gap: 10px; margin-top: 5px; }
-
-        .hist-copy-btn {
-            background: #a5d6a7;
-            color: #1b5e20;
-            padding: 5px 10px;
-            font-size: 0.85rem;
-            border-radius: 10px;
-            flex: 1;
-            box-shadow: 0 3px 8px rgba(165, 214, 167, 0.4);
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+        .hist-copy-btn { background: #a5d6a7; color: #1b5e20; padding: 5px 10px; font-size: 0.85rem; border-radius: 10px; flex: 1; box-shadow: 0 3px 8px rgba(165, 214, 167, 0.4); border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
         .hist-copy-btn:hover { background: #81c784; transform: translateY(-2px); }
-
         .empty-history { color: #ad8a96; font-style: italic; font-size: 0.9rem; margin-top: 10px; }
 
-        .cloud {
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-            opacity: 0.5;
-            z-index: 1;
-            animation: floatClouds 20s linear infinite;
-        }
-        .cloud::before, .cloud::after {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-        }
+        .cloud { position: absolute; background: white; border-radius: 50px; opacity: 0.5; z-index: 1; animation: floatClouds 20s linear infinite; }
+        .cloud::before, .cloud::after { content: ''; position: absolute; background: white; border-radius: 50%; }
         .c1 { width: 100px; height: 30px; top: 10%; left: -120px; }
         .c1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
         .c1::after { width: 40px; height: 40px; top: -15px; left: 55px; }
         .c2 { width: 80px; height: 25px; top: 85%; left: -100px; animation-duration: 25s; animation-delay: 5s; }
         .c2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
         .c2::after { width: 30px; height: 30px; top: -10px; left: 40px; }
-        @keyframes floatClouds {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(120vw); }
-        }
+        @keyframes floatClouds { 0% { transform: translateX(0); } 100% { transform: translateX(120vw); } }
 
         /* --- SZÓTÁR NÉZET CSS --- */
-        #view-dictionary {
-            display: none;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fadeIn 0.5s ease-in-out;
-            position: relative;
-            z-index: 10;
+        #view-dictionary { display: none; width: 100%; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.5s ease-in-out; position: relative; z-index: 10; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .dict-title { text-align: center; color: #d81b60; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(248, 187, 208, 0.5); font-weight: 900; }
+        .dict-search-container { max-width: 800px; margin: 0 auto 20px auto; text-align: center; }
+        #view-dictionary .dict-global-search { width: 100%; padding: 15px; font-size: 16px; border: 3px dashed #f48fb1; border-radius: 20px; box-shadow: 0 4px 15px rgba(244, 143, 177, 0.3); transition: all 0.3s; background: #fffafa; color: #5d4037; font-family: 'Nunito', sans-serif; outline: none; }
+        #view-dictionary .dict-global-search:focus { border-color: #d81b60; box-shadow: 0 4px 20px rgba(216, 27, 96, 0.3); }
+        .table-container { overflow-x: auto; background: rgba(255, 255, 255, 0.95); border-radius: 20px; box-shadow: 0 15px 35px rgba(244, 143, 177, 0.4); border: 4px dashed #ffb4c8; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
+        th, td { padding: 12px 15px; text-align: center; border: 1px solid #ffcdd2; font-size: 14px; }
+        th { color: #fff; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        
+        th.sym-header { background-color: #5c3c92; position: relative; }
+        
+        /* ÚJ: Keresés beállítás ikon és menü */
+        .sym-header-content { display: flex; align-items: center; justify-content: center; gap: 5px; position: relative; }
+        .settings-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; transition: transform 0.3s; padding: 0; display: flex; }
+        .settings-btn:hover { transform: rotate(45deg); }
+        .settings-popup { 
+            position: absolute; top: 35px; left: 50%; transform: translateX(-50%);
+            background: #fffafa; border: 3px dashed #5c3c92; padding: 12px 15px; border-radius: 15px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2); display: none; z-index: 100;
+            color: #5c3c92; font-weight: 800; text-align: left; white-space: nowrap; font-size: 14px;
         }
+        .settings-popup.show { display: block; animation: fadeIn 0.2s ease-in-out; }
+        .settings-popup input[type="checkbox"] { accent-color: #d81b60; transform: scale(1.2); cursor: pointer; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dict-title {
-            text-align: center;
-            color: #d81b60;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(248, 187, 208, 0.5);
-            font-weight: 900;
-        }
-
-        .dict-search-container {
-            max-width: 800px;
-            margin: 0 auto 20px auto;
-            text-align: center;
-        }
-
-        #view-dictionary .dict-global-search {
-            width: 100%;
-            padding: 15px;
-            font-size: 16px;
-            border: 3px dashed #f48fb1;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(244, 143, 177, 0.3);
-            transition: all 0.3s;
-            background: #fffafa;
-            color: #5d4037;
-            font-family: 'Nunito', sans-serif;
-            outline: none;
-        }
-
-        #view-dictionary .dict-global-search:focus {
-            border-color: #d81b60;
-            box-shadow: 0 4px 20px rgba(216, 27, 96, 0.3);
-        }
-
-        .table-container {
-            overflow-x: auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(244, 143, 177, 0.4);
-            border: 4px dashed #ffb4c8;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 1000px;
-        }
-
-        th, td {
-            padding: 12px 15px;
-            text-align: center;
-            border: 1px solid #ffcdd2;
-            font-size: 14px;
-        }
-
-        th {
-            color: #fff;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        th.sym-header { background-color: #5c3c92; }
         th.uk { background-color: #012169; }
         th.us { background-color: #b22234; }
         th.hu { background-color: #27ae60; }
-        
-        .search-row th {
-            top: 45px;
-            padding: 10px;
-            z-index: 9;
-        }
+        .search-row th { top: 45px; padding: 10px; z-index: 9; }
         .search-row th.sym-search { background-color: #4a2e76; }
         .search-row th.uk-search { background-color: #e8ebf1; }
         .search-row th.us-search { background-color: #fbecec; }
         .search-row th.hu-search { background-color: #eaf6ee; }
-
-        #view-dictionary .column-search {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 2px solid #bdc3c7;
-            border-radius: 10px;
-            font-size: 14px;
-            outline: none;
-            transition: border-color 0.3s;
-            font-family: 'Nunito', sans-serif;
-        }
-        #view-dictionary .column-search:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
-        }
-
+        #view-dictionary .column-search { width: 100%; padding: 10px; box-sizing: border-box; border: 2px solid #bdc3c7; border-radius: 10px; font-size: 14px; outline: none; transition: border-color 0.3s; font-family: 'Nunito', sans-serif; }
+        #view-dictionary .column-search:focus { border-color: #3498db; box-shadow: 0 0 5px rgba(52, 152, 219, 0.3); }
         tr:nth-child(even) { background-color: #fff0f5; }
         tr:hover { background-color: #ffe4e1; }
+        .sym { font-weight: bold; font-size: 17px; color: #5c3c92; font-family: 'Courier New', Courier, monospace; }
+        .no-results { display: none; text-align: center; padding: 20px; font-size: 18px; color: #e74c3c; font-weight: bold; }
         
-        .sym {
-            font-weight: bold;
-            font-size: 17px;
-            color: #5c3c92;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        .no-results {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            font-size: 18px;
-            color: #e74c3c;
-            font-weight: bold;
-        }
-
         /* --- TOAST --- */
-        .toast {
-            position: fixed;
-            bottom: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #a5d6a7, #81c784);
-            color: #1b5e20;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-weight: 800;
-            box-shadow: 0 10px 25px rgba(165, 214, 167, 0.6);
-            transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 100;
-            border: 2px solid #fff;
-            white-space: nowrap;
-        }
+        .toast { position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); background: linear-gradient(135deg, #a5d6a7, #81c784); color: #1b5e20; padding: 15px 30px; border-radius: 30px; font-weight: 800; box-shadow: 0 10px 25px rgba(165, 214, 167, 0.6); transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 100; border: 2px solid #fff; white-space: nowrap; }
         .toast.show { bottom: 40px; }
     </style>
 </head>
@@ -494,6 +273,8 @@
             <div class="figure fig-1" id="fig1">🐰</div>
             <div class="figure fig-2" id="fig2">🧶</div>
             <div class="figure fig-3" id="fig3">🐢</div>
+            <div class="figure fig-4" id="fig4">🪡</div>
+            <div class="figure fig-5" id="fig5">🌸</div>
         </div>
 
         <div class="card">
@@ -503,13 +284,13 @@
                 <svg width="150" height="60" viewBox="0 0 150 60">
                     <path class="yarn-path" d="M10,40 Q40,10 70,40 T130,40" />
                 </svg>
-                <div class="hook">🪄</div>
+                <div class="hook">🪄🧶</div>
             </div>
 
             <div class="input-group">
                 <input type="text" id="ytLink" placeholder="Ide illeszd a YouTube linket... 🎀">
                 <button class="action-btn btn-pulse" onclick="generateAndCopy()">
-                    Készíts & Másolj 📋
+                    Készíts & Másolj 🪡✨
                 </button>
             </div>
         </div>
@@ -525,14 +306,25 @@
         <h1 class="dict-title">Horgolási Kifejezések és Szimbólumok Szótára 📖</h1>
 
         <div class="dict-search-container">
-            <input type="text" id="dictSearchInput" class="dict-global-search" placeholder="Globális keresés minden oszlopban (kifejezés, rövidítés, szimbólum)...">
+            <input type="text" id="dictSearchInput" class="dict-global-search" placeholder="Globális keresés...">
         </div>
 
         <div class="table-container">
             <table id="crochetTable">
                 <thead>
                     <tr>
-                        <th class="sym-header" style="width: 8%;">SYM JEL</th>
+                        <th class="sym-header" style="width: 10%;">
+                            <div class="sym-header-content">
+                                SYM JEL 
+                                <button class="settings-btn" id="settingsBtn" onclick="toggleSettings()" title="Keresés beállítása">⚙️</button>
+                                <div id="searchSettingsPopup" class="settings-popup">
+                                    <label style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                                        <input type="checkbox" id="searchDescCheckbox" onchange="filterTable()">
+                                        Keresés a leírásokban is 📖
+                                    </label>
+                                </div>
+                            </div>
+                        </th>
                         <th colspan="2" class="uk">🇬🇧 UK - ANGOL</th>
                         <th colspan="2" class="us">🇺🇸 US - AMERIKAI</th>
                         <th colspan="2" class="hu">🇭🇺 HU - MAGYAR</th>
@@ -647,7 +439,7 @@
 
     <script>
         // --- NÉZETVÁLTÓ LOGIKA ---
-        let currentView = 'generator'; // 'generator' or 'dictionary'
+        let currentView = 'generator'; 
 
         function toggleView() {
             const genView = document.getElementById('view-generator');
@@ -655,9 +447,12 @@
             const bgAnims = document.getElementById('bg-animations');
             const btn = document.getElementById('mainToggleBtn');
 
+            // Ha a beállítás menü nyitva van, zárjuk be
+            document.getElementById('searchSettingsPopup').classList.remove('show');
+
             if (currentView === 'generator') {
                 genView.style.display = 'none';
-                bgAnims.style.display = 'none'; // Eltüntetjük a zavaró animációkat a táblázatnál
+                bgAnims.style.display = 'none'; 
                 dictView.style.display = 'block';
                 btn.innerHTML = '✨ AI Generátor';
                 currentView = 'dictionary';
@@ -670,22 +465,57 @@
             }
         }
 
+        // --- BEÁLLÍTÁSOK MENÜ ---
+        function toggleSettings() {
+            const popup = document.getElementById('searchSettingsPopup');
+            popup.classList.toggle('show');
+        }
+
         // --- GENERÁTOR LOGIKA ---
+        // Szuper cuki állatkák (capybara helyett vidra, lajhár, hörcsög, hód is bekerült a válogatásba!)
         const animalSets = [
-            ['🐰', '🧶', '🐢'], ['🐱', '🧶', '🐭'], ['🐻', '🧶', '🐼'],
-            ['🦊', '🧶', '🦉'], ['🐶', '🧶', '🐸'], ['🐷', '🧶', '🐥'],
-            ['🦄', '🧶', '🦋'], ['🐙', '🧶', '🐳'], ['🐘', '🧶', '🦒'],
-            ['🦔', '🧶', '🐿️']
+            ['🐰', '🧶', '🐢', '🪡', '🌸'], 
+			['🐵', '🧶', '🙈', '🙉', '🙊'],
+            ['🐱', '🧶', '🐭', '🎀', '🐟'], 
+            ['🐻', '🧶', '🐼', '🐌', '🦑'],
+            ['🦊', '🧶', '🦉', '❤️', '🍄'], 
+            ['🐶', '🧶', '🐸', '🦴', '🪷'], 
+            ['🐷', '🧶', '🐥', '🌻', '🍎'],
+            ['🦄', '🧶', '🦋', '✨', '🌈'], 
+            ['🐙', '🧶', '🐳', '🌊', '🐚'], 
+            ['🐘', '🧶', '🦒', '🥜', '🪴'],
+            ['🦔', '🧶', '🐿️', '🌰', '🍁'],
+            ['🦙', '🧶', '🐑', '🪡', '☁️'],
+            ['🦦', '🧶', '🦫', '🐬', '💦'], // Kifejezetten vidra & hód (capybara tesók)
+            ['🦥', '🧶', '🐨', '🦎', '🐍'],
+            ['📏', '🧶', '🪡', '✂️', '👜'],
+            ['🐧', '🧶', '🦭', '🤍', '🐟']
         ];
+
+        const bgAbbreviations = ['sc', 'dc', 'inc', 'dec', 'ch', 'lsz', 'rp', 'fp', 'szap', 'fogy', 'sl st'];
 
         window.onload = () => {
             const randomSet = animalSets[Math.floor(Math.random() * animalSets.length)];
             document.getElementById('fig1').innerText = randomSet[0];
             document.getElementById('fig2').innerText = randomSet[1];
             document.getElementById('fig3').innerText = randomSet[2];
+            document.getElementById('fig4').innerText = randomSet[3];
+            document.getElementById('fig5').innerText = randomSet[4];
+            
             createHearts();
             loadHistory();
+            
+            setInterval(createFaintAbbreviation, 1500);
         };
+
+        // Bárhová máshova kattintva záródjon be a beállítások menü
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('searchSettingsPopup');
+            const btn = document.getElementById('settingsBtn');
+            if (!popup.contains(event.target) && event.target !== btn && popup.classList.contains('show')) {
+                popup.classList.remove('show');
+            }
+        });
 
         function createHearts() {
             const container = document.getElementById('heartsContainer');
@@ -698,6 +528,21 @@
                 heart.style.animationDuration = (8 + Math.random() * 5) + 's';
                 container.appendChild(heart);
             }
+        }
+
+        function createFaintAbbreviation() {
+            if (currentView !== 'generator') return; 
+            const container = document.getElementById('view-generator');
+            const abbr = document.createElement('div');
+            abbr.className = 'faint-abbr';
+            abbr.innerText = bgAbbreviations[Math.floor(Math.random() * bgAbbreviations.length)];
+            
+            abbr.style.left = (Math.random() * 80 + 10) + '%'; 
+            abbr.style.top = (Math.random() * 30 + 60) + '%'; 
+            
+            container.appendChild(abbr);
+
+            setTimeout(() => { abbr.remove(); }, 8000);
         }
 
         function getPromptText(link) {
@@ -830,7 +675,7 @@ It must contain ZERO strings of pattern text or abbreviations.`;
             setTimeout(() => { toast.classList.remove("show"); }, 3000);
         }
 
-        // --- SZÓTÁR KERESŐ LOGIKA ---
+        // --- SZÓTÁR KERESŐ LOGIKA FRISSÍTVE ---
         const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
         const dictSearchInput = document.getElementById('dictSearchInput');
@@ -844,6 +689,9 @@ It must contain ZERO strings of pattern text or abbreviations.`;
             let filterUS = removeAccents(searchUS.value);
             let filterHU = removeAccents(searchHU.value);
             
+            // Lekérjük, hogy a leírásokban is keresünk-e
+            let includeDesc = document.getElementById('searchDescCheckbox').checked;
+
             let table = document.getElementById('crochetTable');
             let tr = table.getElementsByTagName('tr');
             let matchFound = false;
@@ -852,12 +700,27 @@ It must contain ZERO strings of pattern text or abbreviations.`;
                 let tds = tr[i].getElementsByTagName('td');
                 
                 if (tds.length > 0) {
-                    let textAll = removeAccents(tr[i].textContent || tr[i].innerText);
-                    let textUK = removeAccents((tds[1].textContent || "") + " " + (tds[2].textContent || ""));
-                    let textUS = removeAccents((tds[3].textContent || "") + " " + (tds[4].textContent || ""));
-                    let textHU = removeAccents((tds[5].textContent || "") + " " + (tds[6].textContent || ""));
+                    let textGlobal = "";
+                    let textUK = "";
+                    let textUS = "";
+                    let textHU = "";
 
-                    let matchGlobal = textAll.indexOf(filterGlobal) > -1;
+                    // Ha mindkettőben keresünk (Rövidítés + Leírás)
+                    if (includeDesc) {
+                        textGlobal = removeAccents(tr[i].textContent || tr[i].innerText);
+                        textUK = removeAccents((tds[1].textContent || "") + " " + (tds[2].textContent || ""));
+                        textUS = removeAccents((tds[3].textContent || "") + " " + (tds[4].textContent || ""));
+                        textHU = removeAccents((tds[5].textContent || "") + " " + (tds[6].textContent || ""));
+                    } 
+                    // Alapértelmezett: csak rövidítésekben keresünk (+ a SYM jel oszlopban a globálisnál)
+                    else {
+                        textGlobal = removeAccents((tds[0].textContent || "") + " " + (tds[1].textContent || "") + " " + (tds[3].textContent || "") + " " + (tds[5].textContent || ""));
+                        textUK = removeAccents(tds[1].textContent || "");
+                        textUS = removeAccents(tds[3].textContent || "");
+                        textHU = removeAccents(tds[5].textContent || "");
+                    }
+
+                    let matchGlobal = textGlobal.indexOf(filterGlobal) > -1;
                     let matchUK = textUK.indexOf(filterUK) > -1;
                     let matchUS = textUS.indexOf(filterUS) > -1;
                     let matchHU = textHU.indexOf(filterHU) > -1;
