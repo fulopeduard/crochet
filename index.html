@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cuki Horgolós Prompt Másoló 🧶</title>
+    <title>Cuki Horgolós App 🧶 (Prompt & Szótár)</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
@@ -18,18 +18,59 @@
             background-size: 30px 30px;
             font-family: 'Nunito', sans-serif;
             color: #5d4037;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
             min-height: 100vh;
             overflow-x: hidden;
-            padding: 40px 10px;
+            padding: 20px 10px 60px 10px;
             position: relative;
         }
 
+        /* --- NAVIGÁCIÓS GOMB --- */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 50;
+        }
+
+        .toggle-btn {
+            background: linear-gradient(135deg, #fff, #ffe4e1);
+            border: 3px dashed #f48fb1;
+            padding: 12px 25px;
+            border-radius: 30px;
+            color: #c2185b;
+            font-weight: 900;
+            font-size: 1.2rem;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 5px 15px rgba(244, 143, 177, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: linear-gradient(135deg, #ffe4e1, #ffcdd2);
+            box-shadow: 0 8px 20px rgba(244, 143, 177, 0.6);
+        }
+
+        .toggle-btn:active {
+            transform: translateY(2px) scale(0.95);
+        }
+
+        /* --- GENERÁTOR NÉZET CSS --- */
+        #view-generator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
         /* Extra háttér animációk (Szívecskék) */
-        .hearts-container {
+        #bg-animations {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
@@ -52,7 +93,6 @@
             100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
         }
 
-        /* Lebegő amigurumi figurák */
         .floating-figures {
             display: flex;
             justify-content: space-between;
@@ -77,7 +117,6 @@
             100% { transform: translateY(-20px) rotate(5deg); }
         }
 
-        /* Fő tartalom kártya */
         .card, .history-card {
             background: rgba(255, 255, 255, 0.95);
             padding: 30px 20px;
@@ -94,11 +133,9 @@
             transition: transform 0.3s;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-        }
+        .card:hover { transform: translateY(-5px); }
 
-        h1 {
+        .card h1 {
             font-size: 1.6rem;
             font-weight: 900;
             color: #d81b60;
@@ -106,14 +143,13 @@
             text-shadow: 2px 2px 4px rgba(248, 187, 208, 0.5);
         }
 
-        h2 {
+        .history-card h2 {
             font-size: 1.3rem;
             font-weight: 800;
             color: #c2185b;
             margin-bottom: 15px;
         }
 
-        /* Animált fonal és tű SVG */
         .yarn-animation {
             height: 80px;
             width: 100%;
@@ -152,14 +188,9 @@
             100% { transform: translate(30px, 0px) rotate(-20deg); }
         }
 
-        /* Űrlap elemek */
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .input-group { display: flex; flex-direction: column; gap: 15px; }
 
-        input {
+        #view-generator input {
             padding: 15px 20px;
             border-radius: 20px;
             border: 3px solid #f8bbd0;
@@ -174,13 +205,13 @@
             box-shadow: inset 0 3px 5px rgba(248, 187, 208, 0.3);
         }
 
-        input:focus {
+        #view-generator input:focus {
             border-color: #f48fb1;
             box-shadow: 0 0 15px rgba(244, 143, 177, 0.6), inset 0 2px 4px rgba(0,0,0,0.05);
             transform: scale(1.02);
         }
 
-        button {
+        .action-btn {
             background: linear-gradient(135deg, #b3e5fc, #81d4fa);
             border: none;
             padding: 16px;
@@ -199,9 +230,7 @@
             width: 100%;
         }
 
-        .btn-pulse {
-            animation: gentlePulse 2s infinite;
-        }
+        .btn-pulse { animation: gentlePulse 2s infinite; }
 
         @keyframes gentlePulse {
             0% { box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5); }
@@ -209,17 +238,14 @@
             100% { box-shadow: 0 5px 15px rgba(129, 212, 250, 0.5); }
         }
 
-        button:hover {
+        .action-btn:hover {
             transform: translateY(-5px) scale(1.03);
             background: linear-gradient(135deg, #81d4fa, #4fc3f7);
             color: #014377;
         }
 
-        button:active {
-            transform: translateY(2px) scale(0.98);
-        }
+        .action-btn:active { transform: translateY(2px) scale(0.98); }
 
-        /* Előzmények Szekció */
         .history-list {
             list-style: none;
             text-align: left;
@@ -228,18 +254,9 @@
             padding-right: 5px;
         }
 
-        /* Gördítősáv cuki stílusa */
-        .history-list::-webkit-scrollbar {
-            width: 8px;
-        }
-        .history-list::-webkit-scrollbar-track {
-            background: #fce4ec; 
-            border-radius: 10px;
-        }
-        .history-list::-webkit-scrollbar-thumb {
-            background: #f48fb1; 
-            border-radius: 10px;
-        }
+        .history-list::-webkit-scrollbar { width: 8px; }
+        .history-list::-webkit-scrollbar-track { background: #fce4ec; border-radius: 10px; }
+        .history-list::-webkit-scrollbar-thumb { background: #f48fb1; border-radius: 10px; }
 
         .history-item {
             background: #fff0f5;
@@ -264,25 +281,10 @@
             transform: translateX(5px);
         }
 
-        .hist-date {
-            font-size: 0.8rem;
-            color: #880e4f;
-            font-weight: 700;
-        }
+        .hist-date { font-size: 0.8rem; color: #880e4f; font-weight: 700; }
+        .hist-link { font-size: 0.9rem; color: #5d4037; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .hist-link {
-            font-size: 0.9rem;
-            color: #5d4037;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .hist-btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 5px;
-        }
+        .hist-btn-group { display: flex; gap: 10px; margin-top: 5px; }
 
         .hist-copy-btn {
             background: #a5d6a7;
@@ -292,25 +294,173 @@
             border-radius: 10px;
             flex: 1;
             box-shadow: 0 3px 8px rgba(165, 214, 167, 0.4);
-            animation: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .hist-copy-btn:hover { background: #81c784; transform: translateY(-2px); }
+
+        .empty-history { color: #ad8a96; font-style: italic; font-size: 0.9rem; margin-top: 10px; }
+
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 50px;
+            opacity: 0.5;
+            z-index: 1;
+            animation: floatClouds 20s linear infinite;
+        }
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        .c1 { width: 100px; height: 30px; top: 10%; left: -120px; }
+        .c1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
+        .c1::after { width: 40px; height: 40px; top: -15px; left: 55px; }
+        .c2 { width: 80px; height: 25px; top: 85%; left: -100px; animation-duration: 25s; animation-delay: 5s; }
+        .c2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
+        .c2::after { width: 30px; height: 30px; top: -10px; left: 40px; }
+        @keyframes floatClouds {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(120vw); }
         }
 
-        .hist-copy-btn:hover {
-            background: #81c784;
-            transform: translateY(-2px);
+        /* --- SZÓTÁR NÉZET CSS --- */
+        #view-dictionary {
+            display: none;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease-in-out;
+            position: relative;
+            z-index: 10;
         }
 
-        .empty-history {
-            color: #ad8a96;
-            font-style: italic;
-            font-size: 0.9rem;
-            margin-top: 10px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Toast értesítés */
+        .dict-title {
+            text-align: center;
+            color: #d81b60;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(248, 187, 208, 0.5);
+            font-weight: 900;
+        }
+
+        .dict-search-container {
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            text-align: center;
+        }
+
+        #view-dictionary .dict-global-search {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 3px dashed #f48fb1;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(244, 143, 177, 0.3);
+            transition: all 0.3s;
+            background: #fffafa;
+            color: #5d4037;
+            font-family: 'Nunito', sans-serif;
+            outline: none;
+        }
+
+        #view-dictionary .dict-global-search:focus {
+            border-color: #d81b60;
+            box-shadow: 0 4px 20px rgba(216, 27, 96, 0.3);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(244, 143, 177, 0.4);
+            border: 4px dashed #ffb4c8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            border: 1px solid #ffcdd2;
+            font-size: 14px;
+        }
+
+        th {
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th.sym-header { background-color: #5c3c92; }
+        th.uk { background-color: #012169; }
+        th.us { background-color: #b22234; }
+        th.hu { background-color: #27ae60; }
+        
+        .search-row th {
+            top: 45px;
+            padding: 10px;
+            z-index: 9;
+        }
+        .search-row th.sym-search { background-color: #4a2e76; }
+        .search-row th.uk-search { background-color: #e8ebf1; }
+        .search-row th.us-search { background-color: #fbecec; }
+        .search-row th.hu-search { background-color: #eaf6ee; }
+
+        #view-dictionary .column-search {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 2px solid #bdc3c7;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: 'Nunito', sans-serif;
+        }
+        #view-dictionary .column-search:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        tr:nth-child(even) { background-color: #fff0f5; }
+        tr:hover { background-color: #ffe4e1; }
+        
+        .sym {
+            font-weight: bold;
+            font-size: 17px;
+            color: #5c3c92;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            font-size: 18px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* --- TOAST --- */
         .toast {
             position: fixed;
             bottom: -80px;
+            left: 50%;
+            transform: translateX(-50%);
             background: linear-gradient(135deg, #a5d6a7, #81c784);
             color: #1b5e20;
             padding: 15px 30px;
@@ -320,93 +470,211 @@
             transition: bottom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             z-index: 100;
             border: 2px solid #fff;
+            white-space: nowrap;
         }
-
-        .toast.show {
-            bottom: 40px;
-        }
-
-        /* Felhők a háttérben */
-        .cloud {
-            position: absolute;
-            background: white;
-            border-radius: 50px;
-            opacity: 0.5;
-            z-index: 1;
-            animation: floatClouds 20s linear infinite;
-        }
-        
-        .cloud::before, .cloud::after {
-            content: '';
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-        }
-
-        .c1 { width: 100px; height: 30px; top: 10%; left: -120px; }
-        .c1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
-        .c1::after { width: 40px; height: 40px; top: -15px; left: 55px; }
-
-        .c2 { width: 80px; height: 25px; top: 85%; left: -100px; animation-duration: 25s; animation-delay: 5s; }
-        .c2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
-        .c2::after { width: 30px; height: 30px; top: -10px; left: 40px; }
-
-        @keyframes floatClouds {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(120vw); }
-        }
+        .toast.show { bottom: 40px; }
     </style>
 </head>
 <body>
 
-    <div class="hearts-container" id="heartsContainer"></div>
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-
-    <div class="floating-figures">
-        <div class="figure fig-1" id="fig1">🐰</div>
-        <div class="figure fig-2" id="fig2">🧶</div>
-        <div class="figure fig-3" id="fig3">🐢</div>
+    <div class="nav-container">
+        <button id="mainToggleBtn" class="toggle-btn" onclick="toggleView()">
+            📖 Horgolás rajzjelei
+        </button>
     </div>
 
-    <div class="card">
-        <h1>Varázslatos Prompt Készítő ✨</h1>
-        
-        <div class="yarn-animation">
-            <svg width="150" height="60" viewBox="0 0 150 60">
-                <path class="yarn-path" d="M10,40 Q40,10 70,40 T130,40" />
-            </svg>
-            <div class="hook">🪄</div>
+    <div id="bg-animations">
+        <div class="hearts-container" id="heartsContainer"></div>
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+    </div>
+
+    <div id="view-generator">
+        <div class="floating-figures">
+            <div class="figure fig-1" id="fig1">🐰</div>
+            <div class="figure fig-2" id="fig2">🧶</div>
+            <div class="figure fig-3" id="fig3">🐢</div>
         </div>
 
-        <div class="input-group">
-            <input type="text" id="ytLink" placeholder="Ide illeszd a YouTube linket... 🎀">
-            <button class="btn-pulse" onclick="generateAndCopy()">
-                Készíts & Másolj 📋
-            </button>
+        <div class="card">
+            <h1>Varázslatos Prompt Készítő ✨</h1>
+            
+            <div class="yarn-animation">
+                <svg width="150" height="60" viewBox="0 0 150 60">
+                    <path class="yarn-path" d="M10,40 Q40,10 70,40 T130,40" />
+                </svg>
+                <div class="hook">🪄</div>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="ytLink" placeholder="Ide illeszd a YouTube linket... 🎀">
+                <button class="action-btn btn-pulse" onclick="generateAndCopy()">
+                    Készíts & Másolj 📋
+                </button>
+            </div>
+        </div>
+
+        <div class="history-card">
+            <h2>Előzmények 🕰️</h2>
+            <div id="emptyHistory" class="empty-history">Még nem másoltál semmit. 🌸</div>
+            <ul class="history-list" id="historyList"></ul>
         </div>
     </div>
 
-    <div class="history-card">
-        <h2>Előzmények 🕰️</h2>
-        <div id="emptyHistory" class="empty-history">Még nem másoltál semmit. 🌸</div>
-        <ul class="history-list" id="historyList">
-            </ul>
+    <div id="view-dictionary">
+        <h1 class="dict-title">Horgolási Kifejezések és Szimbólumok Szótára 📖</h1>
+
+        <div class="dict-search-container">
+            <input type="text" id="dictSearchInput" class="dict-global-search" placeholder="Globális keresés minden oszlopban (kifejezés, rövidítés, szimbólum)...">
+        </div>
+
+        <div class="table-container">
+            <table id="crochetTable">
+                <thead>
+                    <tr>
+                        <th class="sym-header" style="width: 8%;">SYM JEL</th>
+                        <th colspan="2" class="uk">🇬🇧 UK - ANGOL</th>
+                        <th colspan="2" class="us">🇺🇸 US - AMERIKAI</th>
+                        <th colspan="2" class="hu">🇭🇺 HU - MAGYAR</th>
+                    </tr>
+                    <tr class="search-row">
+                        <th class="sym-search"></th>
+                        <th colspan="2" class="uk-search">
+                            <input type="text" id="searchUK" class="column-search" placeholder="Keresés UK részben...">
+                        </th>
+                        <th colspan="2" class="us-search">
+                            <input type="text" id="searchUS" class="column-search" placeholder="Keresés US részben...">
+                        </th>
+                        <th colspan="2" class="hu-search">
+                            <input type="text" id="searchHU" class="column-search" placeholder="Keresés HU részben...">
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="sym">◎</td><td>adj ring</td><td>adjustable / magic ring</td><td>adj ring</td><td>adjustable / magic ring</td><td></td><td>csúszócsomó / csúszógyűrű</td></tr>
+                    <tr><td class="sym">⬭</td><td>ch</td><td>chain stitch</td><td>ch</td><td>chain stitch</td><td>lsz</td><td>láncszem</td></tr>
+                    <tr><td class="sym">◡</td><td>FL or FLO</td><td>front loop or front loop only</td><td>FL or FLO</td><td>front loop or front loop only</td><td>ESZ</td><td>első szálba öltött pálca</td></tr>
+                    <tr><td class="sym">◠</td><td>BL or BLO</td><td>back loop or back loop only</td><td>BL or BLO</td><td>back loop or back loop only</td><td>HSZ</td><td>hátsó szálba öltött pálca</td></tr>
+                    <tr><td class="sym">⇆</td><td>dir</td><td>direction of work</td><td>dir</td><td>direction of work</td><td>irány</td><td>haladás iránya (jobbra v. balra)</td></tr>
+                    <tr><td class="sym">•</td><td>ss</td><td>slip stitch</td><td>sl st</td><td>slip stitch</td><td>hp</td><td>hamispálca (kúszószem)</td></tr>
+                    <tr><td class="sym">+ X</td><td>dc</td><td>double crochet</td><td>sc</td><td>single crochet</td><td>rp</td><td>rövidpálca</td></tr>
+                    <tr><td class="sym">T</td><td>htr</td><td>half treble crochet</td><td>hdc</td><td>half double crochet</td><td>fp</td><td>félpálca</td></tr>
+                    <tr><td class="sym">T/</td><td>tr</td><td>treble crochet</td><td>dc</td><td>double crochet</td><td>erp</td><td>egyráhajtásos pálca</td></tr>
+                    <tr><td class="sym">T//</td><td>dtr</td><td>double treble crochet</td><td>tr</td><td>treble crochet</td><td>krp</td><td>kétráhajtásos pálca</td></tr>
+                    <tr><td class="sym">T///</td><td>trtr</td><td>triple treble</td><td>dtr</td><td>double treble crochet</td><td>hrp</td><td>háromráhajtásos pálca</td></tr>
+                    <tr><td class="sym">T////</td><td>qtr</td><td>quadruple treble crochet</td><td>trtr</td><td>triple treble crochet</td><td>nrp</td><td>négyráhajtásos pálca</td></tr>
+                    <tr><td class="sym">/\</td><td>dc2tog</td><td>double crochet 2 stitches together</td><td>sc2tog</td><td>single crochet 2 stitches together</td><td>CS2rp</td><td>csomó - két rövidpálca összehorgolva (fogyasztás)</td></tr>
+                    <tr><td class="sym">/|\</td><td>dc3tog</td><td>double crochet 3 stitches together</td><td>sc3tog</td><td>single crochet 3 stitches together</td><td>CS3rp</td><td>csomó - három rövidpálca összehorgolva (fogyasztás)</td></tr>
+                    <tr><td class="sym">T/\</td><td>htr2tog</td><td>half treble crochet 2 stitches together</td><td>hdc2tog</td><td>half double crochet 2 stitches together</td><td>CS2fp</td><td>csomó - két félpálca összehorgolva (fogyasztás)</td></tr>
+                    <tr><td class="sym">T//\</td><td>tr2tog</td><td>treble crochet 2 stitches together</td><td>dc2tog</td><td>double crochet 2 stitches together</td><td>CS2erp</td><td>csomó - két egyráhajtásos pálca összehorgolva (fogyasztás)</td></tr>
+                    <tr><td class="sym">T//|\</td><td>tr3tog</td><td>treble crochet 3 stitches together</td><td>dc3tog</td><td>double crochet 3 stitches together</td><td>CS3erp</td><td>csomó - három egyráhajtásos pálca összehorgolva (fogyasztás)</td></tr>
+                    <tr><td class="sym">T///\</td><td>dtr2tog</td><td>double treble crochet 2 stitches together</td><td>tr2tog</td><td>treble crochet 2 stitches together</td><td>CS2krp</td><td>csomó - két kétráhajtásos pálca összehorgolva (fogyasztás)</td></tr>
+                    <tr><td class="sym"></td><td>BP</td><td>back post</td><td>BP</td><td>back post</td><td>FR</td><td>fordított relief pálca - hátulról körbehorgolás a pálca teste körül</td></tr>
+                    <tr><td class="sym">¿•</td><td>BPss</td><td>back post slip stitch</td><td>BPsl st</td><td>back post slip stitch</td><td>FRhp</td><td>fordított relief hamispálca (kúszószem)</td></tr>
+                    <tr><td class="sym">¿+</td><td>BPdc</td><td>back post double crochet</td><td>BPsc</td><td>back post single crochet</td><td>FRrp</td><td>fordított relief rövidpálca</td></tr>
+                    <tr><td class="sym">¿T</td><td>BPhtr</td><td>back post half treble crochet</td><td>BPhdc</td><td>back post half double crochet</td><td>FRfp</td><td>fordított relief félpálca</td></tr>
+                    <tr><td class="sym">¿T/</td><td>BPtr</td><td>back post treble crochet</td><td>BPdc</td><td>back post double crochet</td><td>FRerp</td><td>fordított relief egyráhajtásos pálca</td></tr>
+                    <tr><td class="sym">¿T//</td><td>BPdtr</td><td>back posted double treble crochet</td><td>BPtr</td><td>back post treble crochet</td><td>FRkrp</td><td>fordított relief kétráhajtásos pálca</td></tr>
+                    <tr><td class="sym">¿T///</td><td>BPtrtr</td><td>back post triple treble</td><td>BPdtr</td><td>back post double treble crochet</td><td>FRhrp</td><td>fordított relief háromráhajtásos pálca</td></tr>
+                    <tr><td class="sym"></td><td>FP</td><td>front post</td><td>FP</td><td>front post</td><td>SR</td><td>sima relief pálca - elölről körbehorgolás a pálca teste körül</td></tr>
+                    <tr><td class="sym">J•</td><td>FPss</td><td>front post slip stitch</td><td>FPsl st</td><td>front post slip stitch</td><td>SRhp</td><td>sima relief hamispálca (kúszószem)</td></tr>
+                    <tr><td class="sym">J+</td><td>FPdc</td><td>front post double crochet</td><td>FPsc</td><td>front post single crochet</td><td>SRrp</td><td>sima relief rövidpálca</td></tr>
+                    <tr><td class="sym">JT</td><td>FPhtr</td><td>front post half treble crochet</td><td>FPhdc</td><td>front post half double crochet</td><td>SRfp</td><td>sima relief félpálca</td></tr>
+                    <tr><td class="sym">JT/</td><td>FPtr</td><td>front post treble crochet</td><td>FPdc</td><td>front post double crochet</td><td>SRerp</td><td>sima relief egyráhajtásos pálca</td></tr>
+                    <tr><td class="sym">JT//</td><td>FPdtr</td><td>front post double treble crochet</td><td>FPtr</td><td>front post treble crochet</td><td>SRkrp</td><td>sima relief kétráhajtásos pálca</td></tr>
+                    <tr><td class="sym">JT///</td><td>FPtrtr</td><td>front post triple treble</td><td>FPdtr</td><td>front post double treble crochet</td><td>SRhrp</td><td>sima relief háromráhajtásos pálca</td></tr>
+                    <tr><td class="sym">( | )</td><td>bo</td><td>bobble</td><td>bo</td><td>bobble</td><td>B</td><td>Bogyó - egy szembe öltött több pálca a tetetjén összehorgolva</td></tr>
+                    <tr><td class="sym">( / )</td><td>CL</td><td>cluster</td><td>CL</td><td>cluster</td><td>B</td><td>bogyó - egy szembe öltött több pálca a tetején összehorgolva</td></tr>
+                    <tr><td class="sym">( // )</td><td>3-tr CL</td><td>3 treble crochet cluster</td><td>CL 3-dc</td><td>3 double crochet cluster</td><td>B-3erp</td><td>bogyó - 3 egyráhajtásos pálcából</td></tr>
+                    <tr><td class="sym">( T )</td><td>3-htr CL</td><td>3 half treble crochet cluster</td><td>CL 3-hdc</td><td>3 half double crochet cluster</td><td>B-3fp</td><td>bogyó - 3 félpálcából</td></tr>
+                    <tr><td class="sym">( pc )</td><td>pc</td><td>popcorn stitch</td><td>pc</td><td>popcorn stitch</td><td>PSZ</td><td>popkorn szem</td></tr>
+                    <tr><td class="sym">( ps )</td><td>ps or puff</td><td>puff stitch</td><td>ps or puff</td><td>puff stitch</td><td>N</td><td>nopp - egy szembe öltött pálcák tetejükön összehorgolva</td></tr>
+                    <tr><td class="sym">\|/</td><td>sh</td><td>shell</td><td>sh</td><td>shell</td><td></td><td>kagyló v. legyező - több pálca egy szembe öltve (5erp)</td></tr>
+                    <tr><td class="sym">|x|</td><td>edc</td><td>extended double crochet</td><td>esc</td><td>extended single crochet</td><td>prp</td><td>patent rövidpálca</td></tr>
+                    <tr><td class="sym">|T|</td><td>ehtr</td><td>extended half treble crochet</td><td>ehdc</td><td>extended half double crochet</td><td>pfp</td><td>patent félpálca</td></tr>
+                    <tr><td class="sym">|T/|</td><td>etr</td><td>extended treble crochet</td><td>edc</td><td>extended double crochet</td><td>perp</td><td>patent egyráhajtásos pálca</td></tr>
+                    <tr><td class="sym">|T//|</td><td>edtr</td><td>extended double treble crochet</td><td>etr</td><td>extended treble crochet</td><td>phrp</td><td>patent háromráhajtásos pálca</td></tr>
+                    <tr><td class="sym">*</td><td>rep</td><td>repeat the instructions following the single asterisk as directed</td><td>rep</td><td>repeat the instructions following the single asterisk as directed</td><td>ism</td><td>ismétlés utasítás szerint a *-tól</td></tr>
+                    <tr><td class="sym">**</td><td>rep</td><td>repeat instructions between asterisks as many times as directed or repeat at specified locations</td><td>rep</td><td>repeat instructions between asterisks as many times as directed or repeat at specified locations</td><td>ism</td><td>ismételd a két * között a megadott utasítást a megadottszámban és módon</td></tr>
+                    <tr><td class="sym">{}</td><td>rep</td><td>work instructions within brackets as many times as directed</td><td>rep</td><td>work instructions within brackets as many times as directed</td><td>ism</td><td>ismételd a zárójel közti utasítást a megadott számban</td></tr>
+                    <tr><td class="sym">[]</td><td>rep</td><td>work instructions within brackets as many times as directed, or stitch number at the end of the round/row</td><td>rep</td><td>work instructions within brackets as many times as directed, or stitch number at the end of the round/row</td><td>ism</td><td>ismételd a zárójel közti utasítást a megadott számban / vagy a sorok végén a szemek száma</td></tr>
+                    <tr><td class="sym">()</td><td>inc</td><td>work instructions within parentheses as many times as directed or work a group of stitches all in the same stitch or space</td><td>inc</td><td>work instructions within parentheses as many times as directed or work a group of stitches all in the same stitch or space</td><td>ism</td><td>ismételd a zárójel közti utasítást a megadott számban de: egy szembe / láncszemívbe / vagy hézagba (szaporítás)</td></tr>
+                    <tr><td class="sym"></td><td>RS</td><td>right side</td><td>RS</td><td>right side</td><td>színe</td><td>a horgolás színoldala</td></tr>
+                    <tr><td class="sym"></td><td>WS</td><td>wrong side</td><td>WS</td><td>wrong side</td><td>visszája</td><td>a horgolás visszája</td></tr>
+                    <tr><td class="sym"></td><td>rnd / RND</td><td>round</td><td>rnd / RND</td><td>round</td><td>kör</td><td>kör - körbehorgolt munkáknál</td></tr>
+                    <tr><td class="sym"></td><td>row</td><td>row</td><td>row</td><td>row</td><td>sor</td><td>sor - oda-vissza horgolásnál</td></tr>
+                    <tr><td class="sym"></td><td>st</td><td>stitch</td><td>st</td><td>stitch</td><td>szem / öltés</td><td>szem / öltés</td></tr>
+                    <tr><td class="sym"></td><td>tch / t-ch</td><td>turning chain</td><td>tch / t-ch</td><td>turning chain</td><td></td><td>fordulószem (sor végén)</td></tr>
+                    <tr><td class="sym"></td><td>sp</td><td>space</td><td>sp</td><td>space</td><td></td><td></td></tr>
+                    <tr><td class="sym"></td><td>sk</td><td>skip</td><td>sk</td><td>skip</td><td></td><td>kihagyni (szemet/eket)</td></tr>
+                    <tr><td class="sym"></td><td>inc</td><td>increase</td><td>inc</td><td>increase</td><td>szap</td><td>szaporítás</td></tr>
+                    <tr><td class="sym"></td><td>dec</td><td>decrease</td><td>dec</td><td>decrease</td><td>fogy</td><td>fogyasztás</td></tr>
+                    <tr><td class="sym"></td><td>rep</td><td>repeat</td><td>rep</td><td>repeat</td><td>ism</td><td>ismételni</td></tr>
+                    <tr><td class="sym"></td><td>cont</td><td>continue</td><td>cont</td><td>continue</td><td>foly</td><td>folytasd, folytatni</td></tr>
+                    <tr><td class="sym"></td><td>yo</td><td>yarn over</td><td>yo</td><td>yarn over</td><td>ráh</td><td>ráhajtás</td></tr>
+                    <tr><td class="sym"></td><td>yoh</td><td>yarn over hook</td><td>yoh</td><td>yarn over hook</td><td>ráh</td><td>ráhajtás a horgolótűre</td></tr>
+                    <tr><td class="sym"></td><td>ch-sp</td><td>chain space</td><td>ch-sp</td><td>chain space</td><td>lsz-ív</td><td>láncszemekből alkotott láncszemív</td></tr>
+                    <tr><td class="sym"></td><td>lp</td><td>loop</td><td>lp</td><td>loop</td><td>hurok</td><td>hurok</td></tr>
+                    <tr><td class="sym"></td><td>prev</td><td>previous</td><td>prev</td><td>previous</td><td></td><td>megelőző, előző (kör, sor..)</td></tr>
+                    <tr><td class="sym"></td><td>foll</td><td>following</td><td>foll</td><td>following</td><td></td><td>folytatva</td></tr>
+                    <tr><td class="sym"></td><td>alt</td><td>alternate</td><td>alt</td><td>alternate</td><td></td><td>váltogatva / felváltva</td></tr>
+                    <tr><td class="sym"></td><td>approx</td><td>approximately</td><td>approx</td><td>approximately</td><td></td><td>körülbelül</td></tr>
+                    <tr><td class="sym"></td><td>be</td><td>begin/beginning</td><td>be</td><td>begin/beginning</td><td></td><td>kezdés</td></tr>
+                    <tr><td class="sym"></td><td>bet</td><td>between</td><td>bet</td><td>between</td><td></td><td>között</td></tr>
+                    <tr><td class="sym"></td><td>tog</td><td>together</td><td>tog</td><td>together</td><td></td><td>össze, összehorgolni</td></tr>
+                    <tr><td class="sym"></td><td>tbl</td><td>through back loop</td><td>tbl</td><td>through back loop</td><td></td><td>a szem hátsó szálán keresztül ölteni</td></tr>
+                    <tr><td class="sym"></td><td>m</td><td>marker</td><td>m</td><td>marker</td><td></td><td>szemjelölő</td></tr>
+                    <tr><td class="sym"></td><td>pm</td><td>place marker</td><td>pm</td><td>place marker</td><td></td><td>szemjelölő</td></tr>
+                    <tr><td class="sym"></td><td>sm or sl m</td><td>slip marker</td><td>sm or sl m</td><td>slip marker</td><td></td><td>szemjelölő</td></tr>
+                    <tr><td class="sym"></td><td>MC</td><td>main color</td><td>MC</td><td>main color</td><td></td><td>fő fonalszín</td></tr>
+                    <tr><td class="sym"></td><td>CC</td><td>contrasting color</td><td>CC</td><td>contrasting color</td><td></td><td>kontrasztos színek</td></tr>
+                    <tr><td class="sym"></td><td>pat / patt</td><td>pattern</td><td>pat / patt</td><td>pattern</td><td></td><td>mintaleírás, minta</td></tr>
+                    <tr><td class="sym"></td><td>rem</td><td>remaining</td><td>rem</td><td>remaining</td><td></td><td>megmaradt, fennmaradó</td></tr>
+                    <tr><td class="sym"></td><td>" or in</td><td>inch</td><td>" or in</td><td>inch</td><td>inch</td><td>1 inch = 2,54 cm</td></tr>
+                    <tr><td class="sym"></td><td>cm</td><td>centimeter</td><td>cm</td><td>centimeter</td><td>cm</td><td>centiméter</td></tr>
+                    <tr><td class="sym"></td><td>g</td><td>gramm</td><td>g</td><td>gramm</td><td>g</td><td>gramm</td></tr>
+                    <tr><td class="sym"></td><td>m</td><td>meter</td><td>m</td><td>meter</td><td>m</td><td>méter</td></tr>
+                    <tr><td class="sym"></td><td>mm</td><td>millimeter</td><td>mm</td><td>millimeter</td><td>mm</td><td>milliméter</td></tr>
+                    <tr><td class="sym"></td><td>oz</td><td>ounce</td><td>oz</td><td>ounce</td><td>oz</td><td>1 ounce = 28.34 gramm</td></tr>
+                    <tr><td class="sym"></td><td>yd</td><td>yard</td><td>yd</td><td>yard</td><td>yd</td><td>1 yard = 0.914 méter</td></tr>
+                </tbody>
+            </table>
+            <div id="noResults" class="no-results">Nincs találat a megadott keresésre. 🌸</div>
+        </div>
     </div>
 
     <div class="toast" id="toastMessage">💖 Sikeresen kimásolva! 💖</div>
 
     <script>
+        // --- NÉZETVÁLTÓ LOGIKA ---
+        let currentView = 'generator'; // 'generator' or 'dictionary'
+
+        function toggleView() {
+            const genView = document.getElementById('view-generator');
+            const dictView = document.getElementById('view-dictionary');
+            const bgAnims = document.getElementById('bg-animations');
+            const btn = document.getElementById('mainToggleBtn');
+
+            if (currentView === 'generator') {
+                genView.style.display = 'none';
+                bgAnims.style.display = 'none'; // Eltüntetjük a zavaró animációkat a táblázatnál
+                dictView.style.display = 'block';
+                btn.innerHTML = '✨ AI Generátor';
+                currentView = 'dictionary';
+            } else {
+                dictView.style.display = 'none';
+                genView.style.display = 'flex';
+                bgAnims.style.display = 'block';
+                btn.innerHTML = '📖 Horgolás rajzjelei';
+                currentView = 'generator';
+            }
+        }
+
+        // --- GENERÁTOR LOGIKA ---
         const animalSets = [
-            ['🐰', '🧶', '🐢'],
-            ['🐱', '🧶', '🐭'],
-            ['🐻', '🧶', '🐼'],
-            ['🦊', '🧶', '🦉'],
-            ['🐶', '🧶', '🐸'],
-            ['🐷', '🧶', '🐥'],
-            ['🦄', '🧶', '🦋'],
-            ['🐙', '🧶', '🐳'],
-            ['🐘', '🧶', '🦒'],
+            ['🐰', '🧶', '🐢'], ['🐱', '🧶', '🐭'], ['🐻', '🧶', '🐼'],
+            ['🦊', '🧶', '🦉'], ['🐶', '🧶', '🐸'], ['🐷', '🧶', '🐥'],
+            ['🦄', '🧶', '🦋'], ['🐙', '🧶', '🐳'], ['🐘', '🧶', '🦒'],
             ['🦔', '🧶', '🐿️']
         ];
 
@@ -432,7 +700,6 @@
             }
         }
 
-        // A TELJESEN ÚJRAMODELLEZETT PROMPT, AMI LEHETETLENNÉ TESZI A JAVASCRIPT HIBÁT, ÉS TISZTA CSS MEGOLDÁST HASZNÁL
         function getPromptText(link) {
             return `${link}
 Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
@@ -518,15 +785,11 @@ It must contain ZERO strings of pattern text or abbreviations.`;
 
         function saveToHistory(link) {
             let history = JSON.parse(localStorage.getItem('crochetPromptHistory')) || [];
-            
             const now = new Date();
             const dateStr = now.toLocaleDateString('hu-HU') + ' ' + now.toLocaleTimeString('hu-HU', {hour: '2-digit', minute:'2-digit'});
             
             history.unshift({ link: link, date: dateStr });
-            
-            if (history.length > 15) {
-                history.pop();
-            }
+            if (history.length > 15) history.pop();
             
             localStorage.setItem('crochetPromptHistory', JSON.stringify(history));
             loadHistory();
@@ -543,13 +806,10 @@ It must contain ZERO strings of pattern text or abbreviations.`;
                 emptyMsg.style.display = 'block';
             } else {
                 emptyMsg.style.display = 'none';
-                
                 history.forEach((item) => {
                     const li = document.createElement('li');
                     li.className = 'history-item';
-                    
                     const displayLink = item.link === "[A LINK]" ? "Nincs link megadva 🎀" : item.link;
-                    
                     li.innerHTML = `
                         <div class="hist-date">🕒 ${item.date}</div>
                         <div class="hist-link">${displayLink}</div>
@@ -567,11 +827,56 @@ It must contain ZERO strings of pattern text or abbreviations.`;
         function showToast() {
             const toast = document.getElementById("toastMessage");
             toast.classList.add("show");
-            
-            setTimeout(() => {
-                toast.classList.remove("show");
-            }, 3000);
+            setTimeout(() => { toast.classList.remove("show"); }, 3000);
         }
+
+        // --- SZÓTÁR KERESŐ LOGIKA ---
+        const removeAccents = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+        const dictSearchInput = document.getElementById('dictSearchInput');
+        const searchUK = document.getElementById('searchUK');
+        const searchUS = document.getElementById('searchUS');
+        const searchHU = document.getElementById('searchHU');
+
+        function filterTable() {
+            let filterGlobal = removeAccents(dictSearchInput.value);
+            let filterUK = removeAccents(searchUK.value);
+            let filterUS = removeAccents(searchUS.value);
+            let filterHU = removeAccents(searchHU.value);
+            
+            let table = document.getElementById('crochetTable');
+            let tr = table.getElementsByTagName('tr');
+            let matchFound = false;
+
+            for (let i = 2; i < tr.length; i++) {
+                let tds = tr[i].getElementsByTagName('td');
+                
+                if (tds.length > 0) {
+                    let textAll = removeAccents(tr[i].textContent || tr[i].innerText);
+                    let textUK = removeAccents((tds[1].textContent || "") + " " + (tds[2].textContent || ""));
+                    let textUS = removeAccents((tds[3].textContent || "") + " " + (tds[4].textContent || ""));
+                    let textHU = removeAccents((tds[5].textContent || "") + " " + (tds[6].textContent || ""));
+
+                    let matchGlobal = textAll.indexOf(filterGlobal) > -1;
+                    let matchUK = textUK.indexOf(filterUK) > -1;
+                    let matchUS = textUS.indexOf(filterUS) > -1;
+                    let matchHU = textHU.indexOf(filterHU) > -1;
+
+                    if (matchGlobal && matchUK && matchUS && matchHU) {
+                        tr[i].style.display = "";
+                        matchFound = true;
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+            document.getElementById('noResults').style.display = matchFound ? "none" : "block";
+        }
+
+        dictSearchInput.addEventListener('keyup', filterTable);
+        searchUK.addEventListener('keyup', filterTable);
+        searchUS.addEventListener('keyup', filterTable);
+        searchHU.addEventListener('keyup', filterTable);
     </script>
 </body>
 </html>
