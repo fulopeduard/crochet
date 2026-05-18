@@ -397,7 +397,6 @@
     <div class="toast" id="toastMessage">💖 Sikeresen kimásolva! 💖</div>
 
     <script>
-        // 10 Különböző cuki állat szett az oldal betöltéséhez
         const animalSets = [
             ['🐰', '🧶', '🐢'],
             ['🐱', '🧶', '🐭'],
@@ -412,16 +411,11 @@
         ];
 
         window.onload = () => {
-            // Random állatok beállítása
             const randomSet = animalSets[Math.floor(Math.random() * animalSets.length)];
             document.getElementById('fig1').innerText = randomSet[0];
             document.getElementById('fig2').innerText = randomSet[1];
             document.getElementById('fig3').innerText = randomSet[2];
-
-            // Szívecskék generálása a háttérben
             createHearts();
-
-            // Előzmények betöltése
             loadHistory();
         };
 
@@ -438,140 +432,74 @@
             }
         }
 
-        // A frissített prompt szöveg generálása
+        // A TELJESEN ÚJRAMODELLEZETT PROMPT, AMI LEHETETLENNÉ TESZI A JAVASCRIPT HIBÁT
         function getPromptText(link) {
             return `${link}
 Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
 
 Requirements:
-• Write the crochet pattern primarily using standard English crochet terminology and abbreviations. Abreviations NEEDS to be clickable and when clicked a popup window should appear with the hungarian explainaition.
+• Write the crochet pattern primarily using standard English crochet terminology and abbreviations. 
 • Also generate a full Hungarian translation of the entire pattern. 
-• Instructions should be integrated directly into the crochet pattern at the appropriate points, rather than being summarized at the top or bottom of the page.
-• Organize the instructions clearly by sections based on the project parts.
-• Number every row/round properly.
-• Include stitch counts at the end of each row/round whenever possible.
-• Explain color changes, stuffing moments, sewing/assembly steps, materials needed, and special notes.
-• Make the instructions easy to follow without needing to watch the video again.
-• Preserve the creator’s intended structure and order of the project as accurately as possible.
-• Use font size 12 in the crochet pattern.
-• You can abreviate the Round word using R only on the crochet pattern, example: R1, R2, R3...
-• Only view the video link that I sent you, even the video has multiple parts on the internet.
+• Instructions should be integrated directly into the crochet pattern. Organize the instructions clearly by sections based on the project parts. Number every row/round properly. Include stitch counts at the end. Explain color changes, stuffing, and assembly.
 
 Then create a cute, cozy, premium-quality single-file HTML webpage that helps track crochet progress.
 
-LANGUAGE SYSTEM:
-• The webpage must support 3 language modes:
-  • Default
-  • EN
-  • HU
-• Default mode behavior:
-  • Crochet pattern instructions stay in English crochet terminology in english as well as the abreviations
-  • EVERY explanation,tip or full sentance needs to be translated to hungarian in the default mode, this is very important.
-  • UI labels, helper text, buttons, and explanations appear in Hungarian, this is very important
-• EN mode:
-  • Everything fully in English
-• HU mode:
-  • Everything fully translated into Hungarian
-• Switching languages must happen instantly without page reload.
-• Both language versions must be fully generated and available offline inside the same HTML file.
-• Checkbox progress must stay synchronized between all language modes.
+LANGUAGE SYSTEM (3 Modes: Default, EN, HU):
+• Default: Crochet instructions stay in English terminology, but EVERY explanation, tip, abbreviation definition or full sentence needs to be translated to Hungarian. UI is Hungarian.
+• EN: Everything fully in English.
+• HU: Everything fully translated into Hungarian.
 
 HEADER & YOUTUBE LINK:
-• Right next to the language switcher buttons (Default, EN, HU) at the top of the page, add a prominent YouTube button (e.g., "📺 Tutorial" or a YouTube icon).
-• When this button is clicked, it MUST open the original YouTube tutorial link in a new tab. The exact link to use is: ${link}
-• Display as a tip on the top of the website, that by long pressing any row where the text isn't visible, it will open a pop up window where the full text is visible.
+• Include language switcher buttons and a prominent YouTube button ("📺 Tutorial" / "📺 Oktatóvideó") that opens exactly this link in a new tab: ${link}
+• Display a tip at the top: Long-pressing any row reveals the full text in a popup.
 
-PROGRESS TRACKING:
-• Every row/round must have its own checkbox.
-• If the user checks row 5, automatically check rows 1–4 as completed too.
-• If the user unchecks a row, all rows after it should automatically uncheck.
-• Save all progress automatically using localStorage.
-• Add a progress bar showing overall completion percentage.
-• Add buttons for:
-  • "Mark all complete"
-  • "Reset progress"
+PROGRESS TRACKING & UI:
+• Checkboxes for every row (auto-check previous rows, auto-uncheck subsequent rows). Use localStorage to save progress. 
+• Use a progress bar, "Mark all complete", and "Reset progress" buttons.
+• Extremely cute, cozy pastel design. When checked, show an emoji matching the pattern theme (e.g. 🐢, 🐰, 🐱) instead of a regular tick. Highlight the R1, R2, R3 round numbers.
+• Optimize for mobile: long-pressing anywhere on a row for 1 sec opens a popup with full text.
 
-LAYOUT & MOBILE OPTIMIZATION:
-• Optimize heavily for mobile use while crocheting.
-• Crochet rows should preferably stay on a single line whenever possible, but if the text is too long and it cannot display it in one line then the line should be scrollable vertically and if the line is holded for a second (or touched for 1 sec on mobile) than it should open it in a pop up windows displaying the information in the window.
-• For the long-press (1 second hold) functionality on mobile rows, ensure it works flawlessly. IMPORTANT: The long-press popup trigger MUST work when tapping and holding ANYWHERE on the entire row's surface area (including the checkbox, spacing, and background), not just when holding the text itself.
-• Avoid unnecessary line wrapping, but you can use two rows if needed, text visibility is more important.
-• It's important to optimize the website for mobile view.
-• Stitch count at the end of each row must be extremely easy to notice.
-• Put stitch counts inside a visually separated pastel-colored badge/pill with strong contrast.
-• Make the layout comfortable to use one-handed beside a real crochet project.
+=========================================
+CRITICAL ARCHITECTURE RULE (ZERO JAVASCRIPT DATA):
+=========================================
+To make it 100% IMPOSSIBLE to get an "Uncaught SyntaxError" from multiline strings, you MUST NOT store ANY pattern data, translations, notes, or explanations inside JavaScript arrays, objects, variables, or inline event handlers.
 
-VISUAL DESIGN:
-• The webpage should be extremely cute, cozy, friendly, and aesthetically pleasing.
-• Use soft pastel colors and crochet-inspired textures/patterns in the background.
-• The theme should automatically match the crochet project shown in the video.
-• When a checkbox is completed, instead of a normal checkmark, show a related emoji/icon based on the crochet project.
-  • Example:
-    • Turtle project → 🐢
-    • Bunny project → 🐰
-    • Cat project → 🐱
-• Add soft animations and polished UI interactions.
-• Make it feel like a premium crochet companion app.
-• The rounds (R1,R2,R3,...) should have a different background color to pop out more to be visible, since it is an essential information.
+Instead, output ALL data directly as pure HTML elements inside the <body>. HTML natively handles line breaks without crashing. 
 
-TECHNICAL REQUIREMENTS:
-• Use clean HTML, CSS, and JavaScript in a single file.
-• Fully responsive design.
-• Smooth animations and polished interactions.
-• No external dependencies required.
-• Make the UI visually pleasant but lightweight and fast.
+1. HTML ROW STRUCTURE REQUIREMENT (Do this for EVERY row/note):
+<div class="row-item" data-idx="1">
+  <div class="custom-checkbox" onclick="toggleRow(1)"></div>
+  <div class="row-content">
+    <span class="round-number">R1</span>
+    <span class="lang-text lang-def">6 <span class="abbr" onclick="showAbbr('SC')">SC</span> in a MR (Ide jön a magyar tipp)</span>
+    <span class="lang-text lang-en" style="display:none;">6 <span class="abbr" onclick="showAbbr('SC')">SC</span> in a MR</span>
+    <span class="lang-text lang-hu" style="display:none;">6 Rövidpálca a Varázskörbe (Magyar tipp)</span>
+    <span class="badge">6</span>
+  </div>
+</div>
 
-CRITICAL JAVASCRIPT WARNING (PREVENT BLANK PAGE):
-To prevent \`Uncaught SyntaxError\` which causes the page to remain totally blank, you must adhere to this absolute rule for JavaScript text generation:
-DO NOT USE ANY PHYSICAL LINE BREAKS (Enters/Newlines) inside any JavaScript strings, arrays, or object values.
-All string data (including materials, notes, explanations, and long texts) MUST be written on a single continuous line of code. If you need a visual line break in the final webpage, use the explicit string escape characters \\n or <br> exactly like this:
-• CORRECT: textEN: "Line 1.\\nLine 2.\\nLine 3."
-• WRONG: 
-textEN: "Line 1.
-Line 2."
-Do NOT rely on backticks (\`) for physical multi-line formatting either, because generating via scripts often strips or incorrectly escapes them. Force everything to be strictly single-line strings.
+2. HTML DICTIONARY FOR ABBREVIATIONS:
+Do not put the abbreviation definitions in JavaScript. Create a hidden HTML container at the bottom of the body containing the data in data-attributes. EVERY abbreviation must be included here:
+<div id="abbr-dictionary" style="display:none;">
+  <div id="dict-SC" data-en="Single Crochet" data-hu="Rövidpálca" data-desc="Ez egy alap horgoló öltés..."></div>
+  <div id="dict-INC" data-en="Increase" data-hu="Szaporítás" data-desc="Két öltést készítesz..."></div>
+  <!-- Add all other abbreviations used -->
+</div>
 
-Important:
-• If any part of the pattern is unclear from the video, make the best possible estimation and clearly mark it as estimated.
-• Do not summarize — extract the full usable crochet pattern in as much detail as possible.
-• Keep crochet terminology accurate in both English and Hungarian.
-
-Additional important requirement for crochet abbreviations:
-
-For EVERY crochet abbreviation used anywhere in the pattern (for example: SC, INC, DEC, SL ST, MR, FLO, BLO, HDC, DC, TR, CH, SK, FO, etc.), always generate:
-• The original abbreviation
-• The full English meaning
-• The Hungarian crochet term
-• A simple Hungarian beginner-friendly explanation
-• Every abreviation should be clickable to see the translation, in the crochet pattern too. The abreviation text should be clickable and colored with light blue indicating that it is clickable, but it should use the same space as normal text to make sure that the text stays in one line, if possible. This requirement is mandatory for ALL abbreviations appearing in the pattern, not only common ones. The abbreviation explanations must be fully translated into Hungarian, not only partially translated.
-
-Example format:
-SC
-• English: Single Crochet
-• Hungarian: Rövidpálca
-• Hungarian explanation: "Ez egy alap horgoló öltés, ahol egy szemre dolgozol és egyszer húzod át a fonalat."
-
-INC
-• English: Increase
-• Hungarian: Szaporítás
-• Hungarian explanation: "Két öltést készítesz ugyanabba a szembe, hogy növeld a szemek számát." Use e.preventDefault() to stop the browser's native context menu from hijacking the interaction."
-
-The website must make these abbreviations clickable or hoverable everywhere they appear in the pattern.
-
-After the website is generated, please review it once again, to prevent the javascript issue, that I mentioned in the Critical javascript warning section and correct the website if needed. `;
+YOUR JAVASCRIPT SHOULD ONLY BE A STATIC CONTROLLER:
+The <script> tag must ONLY contain the logic (functions for language switching by querying '.lang-text', checkbox toggles by data-idx, and popup opening by reading from the #abbr-dictionary DOM elements). 
+It must contain ZERO strings of pattern text or abbreviations.`;
         }
 
-        // Fő gomb megnyomása
         function generateAndCopy() {
             const ytInput = document.getElementById('ytLink').value.trim();
             const linkToUse = ytInput !== "" ? ytInput : "[A LINK]";
             
             doCopy(linkToUse);
             saveToHistory(linkToUse);
-            document.getElementById('ytLink').value = ''; // Mező kiürítése siker után
+            document.getElementById('ytLink').value = ''; 
         }
 
-        // Tényleges másolás funkció
         function doCopy(linkText) {
             const promptText = getPromptText(linkText);
             
@@ -583,23 +511,18 @@ After the website is generated, please review it once again, to prevent the java
             });
         }
 
-        // Újra másolás az előzményekből
         function copyFromHistory(linkText) {
             doCopy(linkText);
         }
 
-        // Mentés Local Storage-ba
         function saveToHistory(link) {
             let history = JSON.parse(localStorage.getItem('crochetPromptHistory')) || [];
             
             const now = new Date();
-            // Cuki magyar dátum formátum
             const dateStr = now.toLocaleDateString('hu-HU') + ' ' + now.toLocaleTimeString('hu-HU', {hour: '2-digit', minute:'2-digit'});
             
-            // Új elem hozzáadása az elejére
             history.unshift({ link: link, date: dateStr });
             
-            // Maximum 15 elemet tartunk meg, hogy ne teljen be a tárhely
             if (history.length > 15) {
                 history.pop();
             }
@@ -608,7 +531,6 @@ After the website is generated, please review it once again, to prevent the java
             loadHistory();
         }
 
-        // Előzmények betöltése és megjelenítése
         function loadHistory() {
             const historyList = document.getElementById('historyList');
             const emptyMsg = document.getElementById('emptyHistory');
@@ -641,12 +563,10 @@ After the website is generated, please review it once again, to prevent the java
             }
         }
 
-        // Toast értesítés megjelenítése
         function showToast() {
             const toast = document.getElementById("toastMessage");
             toast.classList.add("show");
             
-            // 3 másodperc után eltűnik
             setTimeout(() => {
                 toast.classList.remove("show");
             }, 3000);
