@@ -461,11 +461,11 @@ PROGRESS TRACKING & UI:
 • Optimize for mobile: long-pressing anywhere on a row for 1 sec opens a popup with full text.
 
 =========================================
-CRITICAL ARCHITECTURE RULE (ZERO JAVASCRIPT DATA):
+CRITICAL ARCHITECTURE RULE (ZERO JAVASCRIPT DATA & NO LITERAL NEWLINES):
 =========================================
-To make it 100% IMPOSSIBLE to get an "Uncaught SyntaxError" from multiline strings, you MUST NOT store ANY pattern data, translations, notes, or explanations inside JavaScript arrays, objects, variables, or inline event handlers.
+1. ZERO JS DATA: To make it 100% IMPOSSIBLE to get an "Uncaught SyntaxError" from multiline strings, you MUST NOT store ANY pattern data, translations, notes, or explanations inside JavaScript arrays, objects, variables, or inline event handlers. Instead, output ALL data directly as pure HTML elements inside the <body>. HTML natively handles line breaks without crashing. 
 
-Instead, output ALL data directly as pure HTML elements inside the <body>. HTML natively handles line breaks without crashing. 
+2. NO LITERAL NEWLINES: When generating the code (e.g. via Python or scripts), strictly ensure you do NOT use doubly escaped newline characters (like \\n). The final HTML must not display literal "\\n" or "\\r" text floating between rows on the rendered webpage.
 
 1. HTML ROW STRUCTURE REQUIREMENT (Do this for EVERY row/note, no inline display:none!):
 <div class="row-item" data-idx="1">
