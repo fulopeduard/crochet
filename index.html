@@ -438,7 +438,7 @@
             }
         }
 
-        // A frissített prompt szöveg generálása (Kiegészítve a HEADER & YOUTUBE LINK résszel)
+        // A frissített prompt szöveg generálása
         function getPromptText(link) {
             return `${link}
 Watch this YouTube crochet tutorial carefully and extract the complete crochet pattern step-by-step from the video.
@@ -520,16 +520,15 @@ TECHNICAL REQUIREMENTS:
 • No external dependencies required.
 • Make the UI visually pleasant but lightweight and fast.
 
-CRITICAL JAVASCRIPT WARNING (DO NOT IGNORE):
-• When generating the JavaScript code (especially the \`patternData\` array, UI labels, 'Materials', 'Notes', or ANY multi-line text), YOU MUST EXCLUSIVELY USE BACKTICKS (\`) to enclose strings.
-• DO NOT use standard double quotes ("") or single quotes ('') for text that contains line breaks! This is a strict rule.
-• If you use standard quotes for multi-line strings, it will cause an "Uncaught SyntaxError", which breaks the script and leaves the page entirely blank.
-• CORRECT EXAMPLE (using backticks):
-  textEN: \`Line 1
-  Line 2\`
-• WRONG EXAMPLE (using standard quotes):
-  textEN: "Line 1
-  Line 2"
+CRITICAL JAVASCRIPT WARNING (PREVENT BLANK PAGE):
+To prevent \`Uncaught SyntaxError\` which causes the page to remain totally blank, you must adhere to this absolute rule for JavaScript text generation:
+DO NOT USE ANY PHYSICAL LINE BREAKS (Enters/Newlines) inside any JavaScript strings, arrays, or object values.
+All string data (including materials, notes, explanations, and long texts) MUST be written on a single continuous line of code. If you need a visual line break in the final webpage, use the explicit string escape characters \\n or <br> exactly like this:
+• CORRECT: textEN: "Line 1.\\nLine 2.\\nLine 3."
+• WRONG: 
+textEN: "Line 1.
+Line 2."
+Do NOT rely on backticks (\`) for physical multi-line formatting either, because generating via scripts often strips or incorrectly escapes them. Force everything to be strictly single-line strings.
 
 Important:
 • If any part of the pattern is unclear from the video, make the best possible estimation and clearly mark it as estimated.
